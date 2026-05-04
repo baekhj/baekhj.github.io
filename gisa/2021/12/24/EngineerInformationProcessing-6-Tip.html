@@ -1,0 +1,1640 @@
+<!DOCTYPE html><html lang="ko">
+  <head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[정보처리기사 실기] Ⅵ. 기사실기 요약 / 정리 / 단답 / Tip / 알고가기! - 백뚱's Develop</title>
+
+<meta name="description" content="Ⅵ. 화면설계 - 알고가기!!                    UI 유형  ( Tip. CG NO )        CLI [Command Line Interface] : 정적 텍스트 기반 → 명령어를 텍스트로 입력하여 조작.        GUI [Graphical User Int...">
+
+<meta content="백뚱's Develop" property="og:site_name" />
+
+<meta content="[정보처리기사 실기] Ⅵ. 기사실기 요약 / 정리 / 단답 / Tip / 알고가기!" property="og:title" />
+<meta content="article" property="og:type" />
+
+
+<meta content="[정보처리기사 실기] Ⅵ. 기사실기 요약 / 정리 / 단답 / Tip / 알고가기!! (feat.수제비)" property="og:description" />
+
+
+<meta content="https://baekhj.github.io/gisa/2021/12/24/EngineerInformationProcessing-6-Tip" property="og:url" />
+
+
+<meta content="https://baekhj.github.io/assets/img/og_default.png" property="og:image" />
+
+
+
+<link rel="canonical" href="https://baekhj.github.io/gisa/2021/12/24/EngineerInformationProcessing-6-Tip"><link rel="alternate" type="application/rss+xml" title="백뚱's Develop" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+
+<meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/browserconfig.xml">
+
+<meta name="theme-color" content="#ffffff">
+<!-- end favicons snippet -->
+
+<!--
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+-->
+<link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css" ><!-- start custom head snippets -->
+
+
+<!--서치콘솔 소유권확인-->
+<meta name="google-site-verification" content="d9QBVis3rhONt95u2nqXjSpb-XLTROnZAPoW4nytOkA" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3538678447289819"  crossorigin="anonymous"></script>
+
+<!-- end custom head snippets -->
+<script>(function() {
+  window.isArray = function(val) {
+    return Object.prototype.toString.call(val) === '[object Array]';
+  };
+  window.isString = function(val) {
+    return typeof val === 'string';
+  };
+
+  window.hasEvent = function(event) {
+    return 'on'.concat(event) in window.document;
+  };
+
+  window.isOverallScroller = function(node) {
+    return node === document.documentElement || node === document.body || node === window;
+  };
+
+  window.isFormElement = function(node) {
+    var tagName = node.tagName;
+    return tagName === 'INPUT' || tagName === 'SELECT' || tagName === 'TEXTAREA';
+  };
+
+  window.pageLoad = (function () {
+    var loaded = false, cbs = [];
+    window.addEventListener('load', function () {
+      var i;
+      loaded = true;
+      if (cbs.length > 0) {
+        for (i = 0; i < cbs.length; i++) {
+          cbs[i]();
+        }
+      }
+    });
+    return {
+      then: function(cb) {
+        cb && (loaded ? cb() : (cbs.push(cb)));
+      }
+    };
+  })();
+})();
+(function() {
+  window.throttle = function(func, wait) {
+    var args, result, thisArg, timeoutId, lastCalled = 0;
+
+    function trailingCall() {
+      lastCalled = new Date;
+      timeoutId = null;
+      result = func.apply(thisArg, args);
+    }
+    return function() {
+      var now = new Date,
+        remaining = wait - (now - lastCalled);
+
+      args = arguments;
+      thisArg = this;
+
+      if (remaining <= 0) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+        lastCalled = now;
+        result = func.apply(thisArg, args);
+      } else if (!timeoutId) {
+        timeoutId = setTimeout(trailingCall, remaining);
+      }
+      return result;
+    };
+  };
+})();
+(function() {
+  var Set = (function() {
+    var add = function(item) {
+      var i, data = this._data;
+      for (i = 0; i < data.length; i++) {
+        if (data[i] === item) {
+          return;
+        }
+      }
+      this.size ++;
+      data.push(item);
+      return data;
+    };
+
+    var Set = function(data) {
+      this.size = 0;
+      this._data = [];
+      var i;
+      if (data.length > 0) {
+        for (i = 0; i < data.length; i++) {
+          add.call(this, data[i]);
+        }
+      }
+    };
+    Set.prototype.add = add;
+    Set.prototype.get = function(index) { return this._data[index]; };
+    Set.prototype.has = function(item) {
+      var i, data = this._data;
+      for (i = 0; i < data.length; i++) {
+        if (this.get(i) === item) {
+          return true;
+        }
+      }
+      return false;
+    };
+    Set.prototype.is = function(map) {
+      if (map._data.length !== this._data.length) { return false; }
+      var i, j, flag, tData = this._data, mData = map._data;
+      for (i = 0; i < tData.length; i++) {
+        for (flag = false, j = 0; j < mData.length; j++) {
+          if (tData[i] === mData[j]) {
+            flag = true;
+            break;
+          }
+        }
+        if (!flag) { return false; }
+      }
+      return true;
+    };
+    Set.prototype.values = function() {
+      return this._data;
+    };
+    return Set;
+  })();
+
+  window.Lazyload = (function(doc) {
+    var queue = {js: [], css: []}, sources = {js: {}, css: {}}, context = this;
+    var createNode = function(name, attrs) {
+      var node = doc.createElement(name), attr;
+      for (attr in attrs) {
+        if (attrs.hasOwnProperty(attr)) {
+          node.setAttribute(attr, attrs[attr]);
+        }
+      }
+      return node;
+    };
+    var end = function(type, url) {
+      var s, q, qi, cbs, i, j, cur, val, flag;
+      if (type === 'js' || type ==='css') {
+        s = sources[type], q = queue[type];
+        s[url] = true;
+        for (i = 0; i < q.length; i++) {
+          cur = q[i];
+          if (cur.urls.has(url)) {
+            qi = cur, val = qi.urls.values();
+            qi && (cbs = qi.callbacks);
+            for (flag = true, j = 0; j < val.length; j++) {
+              cur = val[j];
+              if (!s[cur]) {
+                flag = false;
+              }
+            }
+            if (flag && cbs && cbs.length > 0) {
+              for (j = 0; j < cbs.length; j++) {
+                cbs[j].call(context);
+              }
+              qi.load = true;
+            }
+          }
+        }
+      }
+    };
+    var load = function(type, urls, callback) {
+      var s, q, qi, node, i, cur,
+        _urls = typeof urls === 'string' ? new Set([urls]) : new Set(urls), val, url;
+      if (type === 'js' || type ==='css') {
+        s = sources[type], q = queue[type];
+        for (i = 0; i < q.length; i++) {
+          cur = q[i];
+          if (_urls.is(cur.urls)) {
+            qi = cur;
+            break;
+          }
+        }
+        val = _urls.values();
+        if (qi) {
+          callback && (qi.load || qi.callbacks.push(callback));
+          callback && (qi.load && callback());
+        } else {
+          q.push({
+            urls: _urls,
+            callbacks: callback ? [callback] : [],
+            load: false
+          });
+          for (i = 0; i < val.length; i++) {
+            node = null, url = val[i];
+            if (s[url] === undefined) {
+              (type === 'js' ) && (node = createNode('script', { src: url }));
+              (type === 'css') && (node = createNode('link', { rel: 'stylesheet', href: url }));
+              if (node) {
+                node.onload = (function(type, url) {
+                  return function() {
+                    end(type, url);
+                  };
+                })(type, url);
+                (doc.head || doc.body).appendChild(node);
+                s[url] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+    return {
+      js: function(url, callback) {
+        load('js', url, callback);
+      },
+      css: function(url, callback) {
+        load('css', url, callback);
+      }
+    };
+  })(this.document);
+})();
+</script><script>
+  (function() {
+    var TEXT_VARIABLES = {
+      version: '2.2.6',
+      sources: {
+        font_awesome: 'https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css',
+        jquery: 'https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js',
+        leancloud_js_sdk: '//cdn.jsdelivr.net/npm/leancloud-storage@3.13.2/dist/av-min.js',
+        chart: 'https://cdn.bootcss.com/Chart.js/2.7.2/Chart.bundle.min.js',
+        gitalk: {
+          js: 'https://cdn.bootcss.com/gitalk/1.2.2/gitalk.min.js',
+          css: 'https://cdn.bootcss.com/gitalk/1.2.2/gitalk.min.css'
+        },
+        valine: 'https://unpkg.com/valine/dist/Valine.min.js',
+        mathjax: 'https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML',
+        mermaid: 'https://cdn.bootcss.com/mermaid/8.0.0-rc.8/mermaid.min.js'
+      },
+      site: {
+        toc: {
+          selectors: 'h1,h2,h3'
+        }
+      },
+      paths: {
+        search_js: '/assets/search.js'
+      }
+    };
+    window.TEXT_VARIABLES = TEXT_VARIABLES;
+  })();
+</script>
+</head>
+  <body>
+    <div class="root" data-is-touch="false">
+      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
+
+      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
+      <div class="header__title">
+        <div class="header__brand"><?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+ "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="347.000000pt" height="336.000000pt" viewBox="0 0 347.000000 336.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,336.000000) scale(0.100000,-0.100000)"
+fill="#000000" stroke="none">
+<path d="M1556 3350 c-226 -26 -408 -80 -611 -181 -77 -38 -183 -100 -235
+-137 -123 -87 -318 -282 -403 -402 -77 -109 -184 -318 -222 -435 -110 -336
+-110 -694 0 -1030 38 -117 145 -326 222 -435 85 -120 280 -315 403 -402 196
+-140 474 -255 718 -300 166 -30 448 -30 614 0 244 45 522 160 718 300 123 87
+318 282 403 402 77 109 184 318 222 435 68 210 95 436 77 644 -20 229 -66 391
+-168 596 -86 174 -174 296 -319 440 -149 148 -268 234 -450 324 -164 81 -320
+134 -483 162 -134 23 -370 32 -486 19z m374 -61 c517 -64 955 -334 1232 -760
+98 -151 190 -384 225 -569 24 -132 24 -428 0 -560 -145 -774 -843 -1340 -1652
+-1340 -580 0 -1113 288 -1427 771 -98 151 -190 384 -225 569 -24 132 -24 428
+0 560 131 700 713 1235 1447 1329 95 12 303 13 400 0z"/>
+<path d="M750 2160 l0 -300 126 0 c69 0 145 5 170 11 152 39 180 245 40 293
+l-39 13 32 19 c46 27 71 72 71 129 0 40 -5 52 -33 80 -45 45 -89 55 -239 55
+l-128 0 0 -300z m254 189 c32 -25 35 -75 7 -110 -14 -18 -31 -23 -80 -27 l-61
+-4 0 81 0 81 54 0 c39 0 60 -6 80 -21z m33 -264 c19 -22 23 -35 19 -59 -11
+-53 -37 -70 -116 -74 l-70 -4 0 87 0 87 71 -4 c64 -3 74 -7 96 -33z"/>
+<path d="M1429 2433 c-38 -98 -209 -563 -209 -568 0 -3 28 -5 62 -3 l62 3 21
+70 21 70 116 3 116 3 23 -76 22 -75 64 0 c57 0 64 2 58 18 -3 9 -52 143 -108
+297 l-103 280 -67 3 c-65 3 -67 2 -78 -25z m125 -242 c14 -41 26 -78 26 -83 0
+-4 -36 -8 -81 -8 -61 0 -80 3 -76 13 2 6 22 65 43 129 l38 117 13 -47 c6 -26
+23 -80 37 -121z"/>
+<path d="M1870 2160 l0 -300 170 0 170 0 0 50 0 50 -115 0 -115 0 0 75 0 75
+100 0 100 0 0 50 0 50 -100 0 -100 0 0 75 0 75 110 0 110 0 0 50 0 50 -165 0
+-165 0 0 -300z"/>
+<path d="M2320 2160 l0 -300 55 0 55 0 0 140 c0 77 3 140 8 139 4 0 51 -63
+105 -140 l98 -139 75 0 75 0 -120 157 -119 156 76 99 c42 55 92 119 110 144
+l34 44 -69 0 -69 0 -95 -134 c-52 -74 -97 -135 -101 -135 -5 -1 -8 60 -8 134
+l0 135 -55 0 -55 0 0 -300z"/>
+<path d="M1300 1160 l0 -300 60 0 60 0 0 125 0 125 135 0 135 0 0 -125 0 -125
+55 0 55 0 0 300 0 300 -55 0 -55 0 0 -125 0 -125 -135 0 -135 0 0 125 0 125
+-60 0 -60 0 0 -300z"/>
+<path d="M2050 1258 c0 -216 -8 -268 -43 -293 -25 -17 -70 -20 -98 -5 -18 10
+-19 7 -19 -44 0 -51 2 -56 26 -62 40 -10 122 3 159 26 20 12 44 41 59 72 26
+51 26 55 26 280 l0 228 -55 0 -55 0 0 -202z"/>
+</g>
+</svg>
+<a title="JAVA, Spring, 웹개발, 알고리즘 풀이, Dart, Flutter, 데이터베이스.
+" href="/">백뚱's Develop</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
+        <ul><li class="navigation__item"><a href="/archive.html">카테고리</a></li><li class="navigation__item"><a href="/about.html">소개</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+      </nav></div>
+  </header>
+</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
+
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+
+<div class="toc-aside">
+    <!-- side_addsense3.html -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3538678447289819"
+         data-ad-slot="4004543909"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
+</aside></div>
+
+              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
+
+<!-- end custom main top snippet -->
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[정보처리기사 실기] Ⅵ. 기사실기 요약 / 정리 / 단답 / Tip / 알고가기!</h1></header></div><meta itemprop="headline" content="[정보처리기사 실기] Ⅵ. 기사실기 요약 / 정리 / 단답 / Tip / 알고가기!"><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%A0%95%EB%B3%B4%EC%B2%98%EB%A6%AC%EA%B8%B0%EC%82%AC+%EC%8B%A4%EA%B8%B0">정보처리기사 실기</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%A0%95%EB%B3%B4%EC%B2%98%EB%A6%AC%EA%B8%B0%EC%82%AC+%EC%8B%A4%EA%B8%B0+Tip">정보처리기사 실기 Tip</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>baekhj</span></li><li><i class="far fa-calendar-alt"></i> <span>2021년 12월 24일</span>
+            </li></ul></div><meta itemprop="author" content="baekhj"/><meta itemprop="datePublished" content="2021-12-24T08:30:00+09:00">
+    <meta itemprop="keywords" content="정보처리기사 실기,정보처리기사 실기 Tip"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+
+<div style="width: 100%;">
+    <!-- post_top_addsense.html -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3538678447289819"
+         data-ad-slot="7562028429"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody"><h1 id="ⅵ-화면설계---알고가기">Ⅵ. 화면설계 - 알고가기!!</h1>
+
+<p><br /></p>
+
+<blockquote>
+
+  <ul>
+    <li>
+      <dl>
+        <dt>UI 유형  <strong><em>( Tip. CG NO )</em></strong></dt>
+        <dd><span style="color:red">C</span>LI [Command Line Interface] : 정적 텍스트 기반 → 명령어를 텍스트로 입력하여 조작.</dd>
+        <dd><span style="color:red">G</span>UI [Graphical User Interface] : 그래픽 반응 기반 → 그래픽기반 마우스나 펜 이용.</dd>
+        <dd><span style="color:red">N</span>UI [Natural User Interface] : 직관적 사용자 반응 기반 → 터치, 음성포함 / 마우스 없이 신체부위 이용 조작.</dd>
+        <dd><span style="color:red">O</span>UI [Organic User Interface] : 유기적 상호작용 기반 → 현실의 모든 사물이 입출력 장치가 될 수 있다.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>인터랙션[Interaction]</dt>
+        <dd>입출력장치를 매개로 디지털 시스템과 사람이 주고받는 일련의 의사소통 과정.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>UI 설계 원칙 <strong><em>( Tip. 직유 학유 )</em></strong></dt>
+        <dd><span style="color:red">직</span>관성 : 누구나 쉽게 이해하고, 쉽게 사용가능해야함  → 쉬운검색/쉬운사용성/일관성.</dd>
+        <dd><span style="color:red">유</span>효성 : 정확하고 완벽하게 사용자의 목표달성 될수 있게.. → 쉬운 오류 처리 및 복구.</dd>
+        <dd><span style="color:red">학</span>습성 : 초보와 숙련자 모두 쉽게 배우고 사용 할 수 있게..  → 쉽게학습/쉬운접근/쉽게기억.</dd>
+        <dd><span style="color:red">유</span>연성 : 사용자의 인터랙션을 최대한 조용하고 실수 방지 할 수 있게..  → 오류예방/실수포용/오류감지.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>UI 설계 지침 <strong><em>( Tip. 사일단결 가표접명오 )</em></strong></dt>
+        <dd><span style="color:red">사</span>용자 중심 : 사용자가 쉽고 편한 환경.</dd>
+        <dd><span style="color:red">일</span>관성 : 버튼이나 조작이 쉽고 빠르게 습득 할 수 있게.</dd>
+        <dd><span style="color:red">단</span>순성 : 조작은 간단히.</dd>
+        <dd><span style="color:red">결</span>과예측가능 : 기능을 보고 결과 예측 가능.</dd>
+        <dd><span style="color:red">가</span>시성 : 주요 기능 메인노출로 쉬운 조작.</dd>
+        <dd><span style="color:red">표</span>준화 : 디자인 표준화로 선행학습 후 쉽게 사용 할 수 있게.</dd>
+        <dd><span style="color:red">접</span>근성 : 사용자의 직무, 연령, 성별등 고려하여 다양한 계층을 수용.</dd>
+        <dd><span style="color:red">명</span>확성 : 사용자가 개념적으로 쉽게 인지.</dd>
+        <dd><span style="color:red">오</span>류발생해결 : 사용자가 오류상황을 정확하게 인지할 수 있게.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>UI 표준 구성  <strong><em>( Tip. 액정 스패조 )</em></strong></dt>
+        <dd>전체적인 U<span style="color:red">X</span>원칙 : 사용자관점에서 업무를 효율적으로 수행할 수 있는 UX 원칙 정의.</dd>
+        <dd><span style="color:red">정</span>책 및 철학 : 조직의 목표나 정체성을 포함하는 정책 및 철할 설정.</dd>
+        <dd>UI <span style="color:red">스</span>타일 가이드 : UI에 대한 구동 환경 및 레이아웃등을 정의.</dd>
+        <dd>UI <span style="color:red">패</span>턴 모델 정의 : CRUD 방식을 기반으로 입출력 패턴 모델 정의.</dd>
+        <dd>UI 표준 수립을 위한 <span style="color:red">조</span>직 구성 : 추진하는 조직을 구성.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>UX[User Experience; 사용자 경험]</dt>
+        <dd>제품과 시스템, 서비스등을 사용자가 직/간접적으로 경험하면서 트끼고 생각하는 총체적 경험.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>CRUD</dt>
+        <dd>Create(생성) / Read(읽기) / Update(갱신) / Delete(삭제)</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>인터페이스 설계서(정의서)</dt>
+        <dd>이기종 시스템 및 컴포넌트 간 데이터 교환처리를 위해 각 시스템의 교환되는 데이터, 업무, 송수신 주체 등이 정의된 문서.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>시스템 인터페이스 정의서</dt>
+        <dd>한 시스템의 인터페이스 현황을 확인하기 위하여 시스템이 갖는 인터페이스 목록과 인터페이스 명세를 보여주는 설계 문서.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>인터페이스 명세</dt>
+        <dd>인터페이스 목록에 있는 각 인터페이스의 상세 정보를 보여주고, 각 인터페이스 번호당 인터페이스 되는 데이터, 데이터형식, 송수신 시스템의 정보등을 구체화 하는 문서.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>상세 기능 인터페이스 정의서</dt>
+        <dd>데이터 송∙수신 시스템간의 데이터 저장소와 속성등의 상세 내역을 포함.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>EAI</dt>
+        <dd>기업내부에서 운영되는 서로 다른 플랫폼 및 애플리케이션 간의 정보를 전달, 연계, 통합이 가능하도록 해주는 솔루션.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>포인트 투 포인트 [Point-to-point]</dt>
+        <dd>1:1 단순 통합방법</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>허브 앤 스포크 [Hub &amp; Spoke]</dt>
+        <dd>단일한 접점의 허브시스템을 통하여 데이터를 전송하는 중앙 집중식 방식</dd>
+        <dd>단점 : 허브 장애시 전체 장애</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>메시지버스 [Message Bus]</dt>
+        <dd>애플리케이션 사이 미들웨어(버스)를 두어 연계하는 미들웨어 통합방식</dd>
+        <dd>확장성이 뛰어나며 대용량 데이터 처리가 가능.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>하이브리드 [Hybrid]</dt>
+        <dd>그룹내에서는 허브 앤 스포크 방식을 사용하고, 그룹간에는 메시지 버스 방식을 사용하는 통합방식.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>ESB [Enterprise Service Bus] 방식</dt>
+        <dd>기업에서 운영되는 서로 다른 플랫폼 및 애플리케이션들간을 하나의 시스템으로 관리 운영할 수 있도록 서비스 중심의 통합을 지향하는 아키텍쳐.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>리치 클라이언트 [Rich Client]</dt>
+        <dd>SW의 실행을 클라이언트에서 책임지는 기술</dd>
+        <dd>서버는 클라이언트에서 요청한 SW의 실행 코드를 스트림 형태로 제공하고, 클라이언트는 서버로부터 스트리밍 되는 SW코드를 클라이언트 PC자원을 이용하여 실행하는 기술.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>씬 클라이언트 [Thin Client]</dt>
+        <dd>소프트웨어의 실행을 전적으로 서버에서 책임지는 기술</dd>
+        <dd>서버에서 가상머신을 이용하여 클라이언트의 데이터와 소프트웨어를 관리 및 실행하는 기술.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>SSO [Single Sign On]</dt>
+        <dd>한번의 로그인을 통해 여러 다른 사이트를 자동적으로 접속하여 이용하는 방법.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>프로파일 [Profile]</dt>
+        <dd>어떤 시스템을 일정 범위 내에서 한정적으로 특징 지우는 그룹화 된 값.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>리서치 [Research]</dt>
+        <dd>지식에 대한 탐구를 기반으로한 인간활동</dd>
+        <dd>이미 존재하던 지식의 발견, 해석, 정정, 재확인 등에 초점을 맞추는 체계적인 조사.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>UI 컨셉션  <strong><em>( Tip. 정 와 스 )</em></strong></dt>
+        <dd><span style="color:red">정</span>보 구조 설계.</dd>
+        <dd><span style="color:red">와</span>이어프레임.</dd>
+        <dd><span style="color:red">스</span>토리보드 설계.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>브레인스토밍 [Brain Storming]</dt>
+        <dd>집단에 소속된 인원들이 자발적으로 자연스럽게 제시된 아이디어목록을 통해 특정 문제에 대한 해답을 찾고자 하는 회의 기법.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>요구사항 매트릭스 [Requirement Matrix]</dt>
+        <dd>ㄷㅏ양한 경로를 통해 수집된 직접적인 요구사항을 검토하여, 페르소나(Persona)의 목적을 기준으로 데이터 요구, 기능요구, 제품품질, 제약 요인 기반으로 만든 요구사항 표.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>정황시나리오 [Contextual Scenario]</dt>
+        <dd>요구사항 정의에 사용되는 초기 시나리오.</dd>
+        <dd>높은수준, 낙관적이면서도 발생상황에서의 이상적인 시스템 동작에 초점을 맞추는 시나리오.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>메시지 큐 [Message Queue]</dt>
+        <dd>비동기 메시지를 사용하는 다른 응용프로그램사이에서 데이터를 송수신하는 기술.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>인터페이스 데이터 표준 확인</dt>
+        <dd>상호 연계하고자 하는 시스템 간 인터페이스가 되어야 할 범위의 데이터 형식과 표준을 정의하는 것.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>컴포넌트 명세서</dt>
+        <dd>컴포넌트의 개요, 내부 클래스의 동작, 인터페이스를 통해 외부와 통신하는 명세를 정의.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>사용성테스트 [Usability Test]</dt>
+        <dd>사용자가 직접 제품을 사용하면서 미리 작성된 시나리오에 맞춰 과제를 수행 한 후, 질문에 답하도록 하는 데스트.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>UI 화면설계 구분  <strong><em>( Tip. 와스프 )</em></strong></dt>
+        <dd><span style="color:red">와</span>이어 프레임[Wireframe] : 이해관계자들과 화면구성을 협의 하거나 서비스간 흐름을 공유하기 위한 화면단위 레이아웃 설계 작업.</dd>
+        <dd><span style="color:red">스</span>토리 보드[Storyboard] : 정책, 프로세스, 콘텐츠 구성, UX/UI 등등 서비스 구축을 위한 모든 정보가 담긴 설계 산출물.</dd>
+        <dd><span style="color:red">프</span>로토 타입[Prototype] : 정적 구성된 와이어프레임 또는 스토리보드에 동적 효과를 적용하여 실제 구현된것 처럼 시물레이션 할 수 있는 모형.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>CSS [Cascading Style Sheet]</dt>
+        <dd>HTML 문서를 스타일링하는 언어.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>스토리 보드 작성 절차  <strong><em>( Tip. 개서스 매추 )</em></strong></dt>
+        <dd>전체 <span style="color:red">개</span>요 작성 : 전반적 개요 명시 / 가장 핵심적인 개념만 대표 화면과 함계 요약해서 작성.</dd>
+        <dd><span style="color:red">서</span>비스 흐름 작성 : 메인 부터 각 서브 메뉴들의 진행 흐름 을 보여주는 화면 작성 / 와이어프레임 에서 누락된 문제 점검 가능.</dd>
+        <dd><span style="color:red">스</span>타일 확정 : 레이아웃, font, 색상 등 일관성 유지해야하는 스타일 확정.</dd>
+        <dd><span style="color:red">메</span>뉴별 화면 설계도 작성 및 상세 설명 : 각 화면의 상세 설명 페이지 작성.</dd>
+        <dd><span style="color:red">추</span>가 관련 정보 작성 : 메뉴별 화면은 상세하고 이해하기 쉽게 작성 / 연결서비스 URL의 경우 함께 명시 / 기능에 대한 설명.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>인터페이스 명세서</dt>
+        <dd>컴포넌트 명세서에 명시된 인터페이스 클래스의 세부적인 조건 및 기능을 명시한 명세서.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>JSON</dt>
+        <dd>비동기 브라우저/서버 통신(Ajax)을 위해 “속성-값 쌍”, “키-값 쌍”으로 이루어진 데이터 오브젝트를 전달하기 위해 인간이 읽을 수 있는 텍스트를 사용하는 개방형 표준 포맷.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>AJAX</dt>
+        <dd>자바스크립트를 사용한 비동기 통신기술.</dd>
+        <dd>클라이언트와 서버간에 XML데이터를 주고받는 기술.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>스니핑</dt>
+        <dd>공격대상에게 직접적으로 공격을 하지 않고 데이터만 몰래 들여다 보는 수동적 공격기법.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>시큐어 코딩 가이드 적용 대상 <strong><em>( Tip. 입보시에코캡아 )</em></strong></dt>
+        <dd><span style="color:red">입</span>력데이터 검증 및 표현</dd>
+        <dd><span style="color:red">보</span>안 기능</dd>
+        <dd><span style="color:red">시</span>간 및 상태</dd>
+        <dd><span style="color:red">에</span>러처리</dd>
+        <dd><span style="color:red">코</span>드오류</dd>
+        <dd><span style="color:red">캡</span>슐화</dd>
+        <dd><span style="color:red">A</span>PI오용</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt><strong>입력데이터 검증</strong>의 보안 약점 및 대응 방안 (시큐어 코딩가이드 적용 대상 중 하나..)</dt>
+        <dd>보안약점 : 프로그램 입력값에 대한 검증 누락∙부적절한 검증, 잘못된 형식 지정</dd>
+        <dd>대응방안 : 사용자∙프로그램 입력 데이터에 대한 유효성 검증 체계를 수립</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>UI 프로토타입 작성시 고려사항 <strong><em>( Tip. 계범 목기 산유 )</em></strong></dt>
+        <dd>프로토타입 <span style="color:red">계</span>획 장성</dd>
+        <dd>프로토타입 <span style="color:red">범</span>위 확인</dd>
+        <dd>프로토타입 <span style="color:red">목</span>표 확인</dd>
+        <dd>프로토타입 <span style="color:red">기</span>간 및 비용 확인</dd>
+        <dd>프로토타입 <span style="color:red">산</span>출물 확인</dd>
+        <dd>프로토타입 <span style="color:red">유</span>의사항 확인</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>UI 프로토타입 제작 및 검토 프로세스 <strong><em>( Tip. 아유프적 )</em></strong></dt>
+        <dd>소프트웨어 <span style="color:red">아</span>키텍처 설계 원리 확인</dd>
+        <dd>프로토타입 <span style="color:red">유</span>스케이스 작성</dd>
+        <dd>UI 요구사항을 반영한 <span style="color:red">프</span>로토타입 제작</dd>
+        <dd>UI <span style="color:red">적</span>정성 검토</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>기능적 요구사항</dt>
+        <dd>시스템의 입력으로 무엇이 포함되어야 하는지?</dd>
+        <dd>시스템의 출력으로 무엇이 포함되어야 하는지?</dd>
+        <dd>시스템이 어떤 데이터를 저장해야 하는지?</dd>
+        <dd>시스템이 어떤 연산을 수행해야 하는지?</dd>
+        <dd>기타 요구사항(예: 동기화 등)</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>비기능적 요구사항</dt>
+        <dd>사용성, 효율성, 신뢰성, 유지보수성, 재사용성 등 품질에 관한 요구사항</dd>
+        <dd>플랫폼, 사용기술 등 시스템 환경에 관한 요구사항</dd>
+        <dd>비용, 일정 등 프로젝트 계획에 관한 요구사항</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>스토리보드 [Storyboard]</dt>
+        <dd>UI화면 설계를 위해서 정책이나 프로세스 및 콘텐츠의 구성, 와이어프레임(UI, UX), 기능에 대한 정의, 데이터베이스의 연동 등 구축하는 서비스를 위한 대부분 정보가 수록된 문서.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>대칭키 암호화 알고리즘</dt>
+        <dd>암호화 / 복호화에 같은 암호키를 이용하는 알고리즘.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>비대칭키 암호화 알고리즘</dt>
+        <dd>공개키는 누구나 알 수 있지만, 그에 대응하는 비밀키는 키의 소유자만이 알 수 있도록, 공개키와 비밀키를 사용하는 알고리즘.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>API 암호화 방식 (데이터 베이스 암호화 기법 중 하나)</dt>
+        <dd>애플리케이션 레벨에서 암호 모듈을 적용하는 애플리케이션 수정 방식</dd>
+        <dd>애플리케이션 서버에 암∙복호화, 정책관리, 키 관리 등의 부하가 발생.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>Plug-In 암호화 방식 (데이터 베이스 암호화 기법 중 하나)</dt>
+        <dd>DB 레벨의 확장성 프로시저 기능을 이용, DBMS에 Plug-In 모듈로 동작하는 방식.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>하이브리드 암호화 방식 (데이터 베이스 암호화 기법 중 하나)</dt>
+        <dd>API 방식과 Plug-In 방식을 결합하는 방식</dd>
+        <dd>DB서버와 애플리케이션 서버로 부하가 분산됨.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>액터 [Actor]</dt>
+        <dd>시스템 외부에 있고 시스템과 상호작용을 하는 사람 또는 시스템.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>유스케이스 [Usecase]</dt>
+        <dd>시스템이 액터엑 제공해야 하는 기능으로 시스템 요구사항이자, 사용자 입장에서 바라본 시스템의 기능.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>xUnit</dt>
+        <dd>자바(JUnit), C++(Cppunit), .Net(Nunit)등 다양한 언어를 지원하는 단위 테스트 프레임워크.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>STAF</dt>
+        <dd>서비스 호출, 컴포넌트 재사용 등 다양한 환경을 지원하는 테스트 프레임워크.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>FitNesse</dt>
+        <dd>인터페이스 구현 검증 도구 중 하나.</dd>
+        <dd>웹 기반 테스트 케이스 설계/실행/결과 확인 등을 지원하는 테스트 프레임워크.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>Selenium</dt>
+        <dd>인터페이스 구현 검증 도구 중 하나.</dd>
+        <dd>다양한 브라우저 지원 및 개발언어를 지원하는 웹 애플리케이션 테스트 프레임워크.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>watir</dt>
+        <dd>인터페이스 구현 검증 도구 중 하나.</dd>
+        <dd>루비 기반 웹 애플리케이션 테스트 프레임워크.</dd>
+        <dd>모든 언어 기반의 웹 어플리케이션 테스트와 브라우저 호환성 테스팅이 가능.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>목업 [Mockup]</dt>
+        <dd>실제 제품이 나오기 전 만드는 모형을 의미.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>스카우터 [SCOUTER]</dt>
+        <dd>인터페이스 도구</dd>
+        <dd>애플리케이션에 대한 모니터링 및 DB Agent 를 통해 오픈 소스 DB 모니터링 기능, 긴터페이스 감시 기능을 제공.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>인터페이스 오류 처리 방법</dt>
+        <dd>사용자 화면에서 오류를 인지하도록 구현</dd>
+        <dd>인터페이스 오류 로그 생성</dd>
+        <dd>인터페이스 관련 테이블에 오류사항 기록</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>UI 흐름 설계</dt>
+        <dd>업무의 흐름이나 업무 수행과 관련된 일련의 클릭에 의한 화면의 위치와 흐름을 흐름도 형식으로 표현하는 활동.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>UI 흐름 설계 수행 절차</dt>
+        <dd>UI 설계안의 적정성 확인</dd>
+        <dd>화면과 폼의 흐름 설계</dd>
+        <dd>화면에 표현되어야 할 기능적 요구사항 및 비기능적 요구사항 검토</dd>
+        <dd>화면의 입력요소 및 유스케이스를 통한 UI 요구사항 확인</dd>
+        <dd>유스케이스 설계</dd>
+        <dd>기능 및 양식 확인</dd>
+      </dl>
+    </li>
+    <li>UI 유스케이스 설계 단계
+      <ol>
+        <li>요구사항을 바탕으로 액터별 시나리오 구상.</li>
+        <li>UI 요구사항을 바탕으로 액터 세분화.</li>
+        <li>UI 유스케이스 설계.</li>
+      </ol>
+    </li>
+    <li>
+      <dl>
+        <dt>화면설계도구 종류</dt>
+        <dd>파워 목업 [Power Mockup]</dd>
+        <dd>발사믹 목업 [Balsamiq Mockups]</dd>
+        <dd>카카오 오븐 [Oven]</dd>
+      </dl>
+    </li>
+    <li>UI 상세설계 프로세스
+      <ol>
+        <li>UI 요구사항 최종 확인.</li>
+        <li>UI 구조 설계.</li>
+        <li>사용자 기반 메뉴 구조 설계.</li>
+        <li>화면 설계.</li>
+        <li>하위 시스템 단위내∙외부 상세 화면과 폼 설계.</li>
+      </ol>
+    </li>
+    <li>
+      <dl>
+        <dt>UI 검토 수행</dt>
+        <dd>사용성의 반복적인 검토를 통해 완성도가 높은 UI 상세설계 수행이 가능하므로 UI 검토를 2~3번 수행</dd>
+        <dd>UI스토리보드 활용을 통해 페이퍼 프로토타입의 평가는 짧은 단위로 개발 및 평가를 반복하여 확인</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>UI 검토 보완</dt>
+        <dd>UI 검토 수행을 통한 사용자 평가 결과를 토대로 설계를 보완.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>사용성 검토 및 검증 수행</dt>
+        <dd>고수준의 프로토타입을 활용하여 내부 개발자 및 전문가들의 UI사용성 평가를 통해 개선사항을 지속적으로 반영.</dd>
+      </dl>
+    </li>
+    <li>UI지침의 사용자 요구사항 도출 단계
+      <ol>
+        <li>페르소나(Persona) 정의</li>
+        <li>콘셉트 모델 정의</li>
+        <li>사용자 요구사항 정의</li>
+        <li>UI 컨셉션</li>
+      </ol>
+    </li>
+    <li>
+      <dl>
+        <dt>프로토타입</dt>
+        <dd>소프트웨어의 설계 또는 성능, 구현 가능성, 운용 가능성을 평가하거나 요구사항을 좀 더 잘 이해하고 결정하기 위하여 전체적인 기능을 간략한 형태로 구현한 시제품.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>프로토 타이핑 도구</dt>
+        <dd>UX핀 [UXPin]</dd>
+        <dd>액슈어 [AXURE]</dd>
+        <dd>네이버 프로토나우 [ProtoNOW]</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>소프트웨어 테스트</dt>
+        <dd>개발된 응용 애플리케이션이나 시스템이 사용자가 요구하는 기능과 성능, 사용성, 안정성 등을 만족하는지 확인하고, 노출되지 않은 숨어있는 소프트웨어의 결함을 찾아내는 활동.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>테스트 환경 구축</dt>
+        <dd>개발된 응용 소프트웨어가 실제 운영 시스템에서 정상적으로 작동되는지 테스트 하기 위하여 실제 운영 시스템과 동일한(유사한) 사양의 하드웨어, 소프트웨어, 네트워크 등의 환경 시설을 구축하는 활동.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>통합 테스트 [Integration Test]</dt>
+        <dd>애플리케이션 통합 테스트는 소프트웨어 각 모듈 간의 인터페이스 관련 오류 및 결함을 찾아내기 위한 체계적인 테스트 기법.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>테스트 결함 관리</dt>
+        <dd>각 단계별 테스트 수행 후 발생한 결함의 재발 방지와 유사 결함 발견시 처리 시간 단축을 위해 결함을 추적하고 관리하는 활동.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>테스트 커버리지 [Test Coverage]</dt>
+        <dd>주어진 테스트 케이스에 의해 수행되는 소프트웨어의 테스트 범위를 측정하는 테스트 품질 측정기준.</dd>
+        <dd>테스트의 정확성과 신뢰성을 향상시키는 역할을 함.</dd>
+      </dl>
+    </li>
+  </ul>
+
+  <p><br />
+<br />
+<br />
+<br /></p>
+
+</blockquote>
+
+<hr />
+<ul>
+  <li>정보처리기사 필기 합격 후 실기대비 정리 및 책없이 간단히 보기위해 작성하였습니다.</li>
+  <li>2020년 수제비 정보처리기사 책 기반으로 정리 하였습니다.</li>
+  <li>저작권 관련 문제가 있다면 hojunbbaek@gmail.com 으로 메일 주시면 바로 삭제 조치 하도록 하겠습니다.</li>
+</ul>
+
+<hr />
+</div>
+
+
+  <hr>
+  <div class="article__info clearfix">[정보처리기사 실기] Ⅵ. 기사실기 요약 / 정리 / 단답 / Tip / 알고가기!! (feat.수제비)</div>
+  <div class="article__info clearfix">
+    <ul class="left-col menu">
+      
+      
+      <li>정보처리기사,</li>
+      
+      <li>기사실기,</li>
+      
+      <li>NCS,</li>
+      
+      <li>기사 요약,</li>
+      
+      <li>기사 정리,</li>
+      
+      <li>화면설계,</li>
+      
+      
+    </ul>
+  </div>
+  <hr><script src="https://utteranc.es/client.js"
+          repo="baekhj/baekhj.github.blog.comment"
+          issue-term="pathname"
+          label="comments"
+          theme="github-dark"
+          crossorigin="anonymous"
+          async>
+  </script><div class="d-print-none"><footer class="article__footer"><span>마지막 수정
+      <time itemprop="dateModified" datetime="2021-12-27T08:10:00+09:00">2021년 12월 27일</time>
+    </span><!-- start custom article footer snippet -->
+
+<!-- footer.html -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-3538678447289819"
+     data-ad-slot="6328837808"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<!-- end custom article footer snippet -->
+</footer>
+<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/gisa/2021/12/24/EngineerInformationProcessing-18">[정보처리기사 실기] Ⅵ. 화면 설계 - UI설계</a></div><div class="next"><span>다음</span><a href="/gisa/2022/01/06/EngineerInformationProcessing-19">[정보처리기사 실기] Ⅶ. 애플리케이션 테스트 관리 - 애플리케이션 테스트 케이스 설계</a></div></div></div>
+
+</div>
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
+
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
+</script>
+</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+
+<!-- end custom main bottom snippet -->
+</div>
+            </div></div></div><div class="page__footer d-print-none">
+<footer class="footer py-4 js-page-footer">
+  <div class="main"><div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="baekhj"><meta itemprop="url" content="https://baekhj.github.io/"><meta itemprop="description" content="I am an amazing person."><div class="footer__author-links"><div class="author-links">
+  <ul class="menu menu--nowrap menu--inline"><link itemprop="url" href="https://baekhj.github.io/"><li title="이메일 보내기">
+      <a class="button button--circle mail-button" itemprop="email" href="mailto:hojunbbaek@gmail.com" target="_blank">
+        <i class="fas fa-envelope"></i>
+      </a><li title="Github에서 팔로우하기">
+        <a class="button button--circle github-button" itemprop="sameAs" href="https://github.com/baekhj" target="_blank">
+          <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path class="svgpath" data-index="path_0" fill="#272636" d="M0 525.2c0 223.6 143.3 413.7 343 483.5 26.9 6.8 22.8-12.4 22.8-25.4l0-88.7c-155.3 18.2-161.5-84.6-172-101.7-21.1-36-70.8-45.2-56-62.3 35.4-18.2 71.4 4.6 113.1 66.3 30.2 44.7 89.1 37.2 119 29.7 6.5-26.9 20.5-50.9 39.7-69.6C248.8 728.2 181.7 630 181.7 513.2c0-56.6 18.7-108.7 55.3-150.7-23.3-69.3 2.2-128.5 5.6-137.3 66.5-6 135.5 47.6 140.9 51.8 37.8-10.2 80.9-15.6 129.1-15.6 48.5 0 91.8 5.6 129.8 15.9 12.9-9.8 77-55.8 138.8-50.2 3.3 8.8 28.2 66.7 6.3 135 37.1 42.1 56 94.6 56 151.4 0 117-67.5 215.3-228.8 243.7 26.9 26.6 43.6 63.4 43.6 104.2l0 128.8c0.9 10.3 0 20.5 17.2 20.5C878.1 942.4 1024 750.9 1024 525.3c0-282.9-229.3-512-512-512C229.1 13.2 0 242.3 0 525.2L0 525.2z" />
+</svg>
+</div>
+        </a>
+      </li></ul>
+</div>
+</div>
+    </div><div class="site-info mt-2">
+      <div>© 백뚱's Develop 2021,
+      </div>
+    </div>
+  </div>
+</footer>
+</div></div>
+    </div><script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $body = $('body'), $window = $(window);
+    var $pageRoot = $('.js-page-root'), $pageMain = $('.js-page-main');
+    var activeCount = 0;
+    function modal(options) {
+      var $root = this, visible, onChange, hideWhenWindowScroll = false;
+      var scrollTop;
+      function setOptions(options) {
+        var _options = options || {};
+        visible = _options.initialVisible === undefined ? false : show;
+        onChange = _options.onChange;
+        hideWhenWindowScroll = _options.hideWhenWindowScroll;
+      }
+      function init() {
+        setState(visible);
+      }
+      function setState(isShow) {
+        if (isShow === visible) {
+          return;
+        }
+        visible = isShow;
+        if (visible) {
+          activeCount++;
+          scrollTop = $(window).scrollTop() || $pageMain.scrollTop();
+          $root.addClass('modal--show');
+          $pageMain.scrollTop(scrollTop);
+          activeCount === 1 && ($pageRoot.addClass('show-modal'), $body.addClass('of-hidden'));
+          hideWhenWindowScroll && window.hasEvent('touchstart') && $window.on('scroll', hide);
+          $window.on('keyup', handleKeyup);
+        } else {
+          activeCount > 0 && activeCount--;
+          $root.removeClass('modal--show');
+          $window.scrollTop(scrollTop);
+          activeCount === 0 && ($pageRoot.removeClass('show-modal'), $body.removeClass('of-hidden'));
+          hideWhenWindowScroll && window.hasEvent('touchstart') && $window.off('scroll', hide);
+          $window.off('keyup', handleKeyup);
+        }
+        onChange && onChange(visible);
+      }
+      function show() {
+        setState(true);
+      }
+      function hide() {
+        setState(false);
+      }
+      function handleKeyup(e) {
+        // Char Code: 27  ESC
+        if (e.which ===  27) {
+          hide();
+        }
+      }
+      setOptions(options);
+      init();
+      return {
+        show: show,
+        hide: hide,
+        $el: $root
+      };
+    }
+    $.fn.modal = modal;
+  });
+})();
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+(function () {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    // search panel
+    var search = (window.search || (window.search = {}));
+    var useDefaultSearchBox = window.useDefaultSearchBox === undefined ?
+      true : window.useDefaultSearchBox ;
+
+    var $searchModal = $('.js-page-search-modal');
+    var $searchToggle = $('.js-search-toggle');
+    var searchModal = $searchModal.modal({ onChange: handleModalChange, hideWhenWindowScroll: true });
+    var modalVisible = false;
+    search.searchModal = searchModal;
+
+    var $searchBox = null;
+    var $searchInput = null;
+    var $searchClear = null;
+
+    function getModalVisible() {
+      return modalVisible;
+    }
+    search.getModalVisible = getModalVisible;
+
+    function handleModalChange(visible) {
+      modalVisible = visible;
+      if (visible) {
+        search.onShow && search.onShow();
+        useDefaultSearchBox && $searchInput[0] && $searchInput[0].focus();
+      } else {
+        search.onShow && search.onHide();
+        useDefaultSearchBox && $searchInput[0] && $searchInput[0].blur();
+        setTimeout(function() {
+          useDefaultSearchBox && ($searchInput.val(''), $searchBox.removeClass('not-empty'));
+          search.clear && search.clear();
+          window.pageAsideAffix && window.pageAsideAffix.refresh();
+        }, 400);
+      }
+    }
+
+    $searchToggle.on('click', function() {
+      modalVisible ? searchModal.hide() : searchModal.show();
+    });
+    // Char Code: 83  S, 191 /
+    $(window).on('keyup', function(e) {
+      if (!modalVisible && !window.isFormElement(e.target || e.srcElement) && (e.which === 83 || e.which === 191)) {
+        modalVisible || searchModal.show();
+      }
+    });
+
+    if (useDefaultSearchBox) {
+      $searchBox = $('.js-search-box');
+      $searchInput = $searchBox.children('input');
+      $searchClear = $searchBox.children('.js-icon-clear');
+      search.getSearchInput = function() {
+        return $searchInput.get(0);
+      };
+      search.getVal = function() {
+        return $searchInput.val();
+      };
+      search.setVal = function(val) {
+        $searchInput.val(val);
+      };
+
+      $searchInput.on('focus', function() {
+        $(this).addClass('focus');
+      });
+      $searchInput.on('blur', function() {
+        $(this).removeClass('focus');
+      });
+      $searchInput.on('input', window.throttle(function() {
+        var val = $(this).val();
+        if (val === '' || typeof val !== 'string') {
+          search.clear && search.clear();
+        } else {
+          $searchBox.addClass('not-empty');
+          search.onInputNotEmpty && search.onInputNotEmpty(val);
+        }
+      }, 400));
+      $searchClear.on('click', function() {
+        $searchInput.val(''); $searchBox.removeClass('not-empty');
+        search.clear && search.clear();
+      });
+    }
+  });
+})();
+</script><div class="search search--dark">
+  <div class="main">
+    <div class="search__header">검색</div>
+    <div class="search-bar">
+      <div class="search-box js-search-box">
+        <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
+        <input type="text" />
+        <div class="search-box__icon-clear js-icon-clear">
+          <a><i class="fas fa-times"></i></a>
+        </div>
+      </div>
+      <button class="button button--theme-dark button--pill search__cancel js-search-toggle">
+        취소</button>
+    </div>
+    <div class="search-result js-search-result"></div>
+  </div>
+</div>
+<script>var SOURCES = window.TEXT_VARIABLES.sources;
+var PAHTS = window.TEXT_VARIABLES.paths;
+window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
+  var search = (window.search || (window.search = {}));
+  var searchData = window.TEXT_SEARCH_DATA || {};
+
+  function memorize(f) {
+    var cache = {};
+    return function () {
+      var key = Array.prototype.join.call(arguments, ',');
+      if (key in cache) return cache[key];
+      else return cache[key] = f.apply(this, arguments);
+    };
+  }
+
+  /// search
+  function searchByQuery(query) {
+    var i, j, key, keys, cur, _title, result = {};
+    keys = Object.keys(searchData);
+    for (i = 0; i < keys.length; i++) {
+      key = keys[i];
+      for (j = 0; j < searchData[key].length; j++) {
+        cur = searchData[key][j], _title = cur.title;
+        if ((result[key] === undefined || result[key] && result[key].length < 20 )
+          && _title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
+          if (result[key] === undefined) {
+            result[key] = [];
+          }
+          result[key].push(cur);
+        }
+      }
+    }
+    return result;
+  }
+
+  var renderHeader = memorize(function(header) {
+    return $('<p class="search-result__header">' + header + '</p>');
+  });
+
+  var renderItem = function(index, title, url) {
+    return $('<li class="search-result__item" data-index="' + index + '"><a class="button" href="' + url + '">' + title + '</a></li>');
+  };
+
+  function render(data) {
+    if (!data) { return null; }
+    var $root = $('<ul></ul>'), i, j, key, keys, cur, itemIndex = 0;
+    keys = Object.keys(data);
+    for (i = 0; i < keys.length; i++) {
+      key = keys[i];
+      $root.append(renderHeader(key));
+      for (j = 0; j < data[key].length; j++) {
+        cur = data[key][j];
+        $root.append(renderItem(itemIndex++, cur.title, cur.url));
+      }
+    }
+    return $root;
+  }
+
+  // search box
+  var $result = $('.js-search-result'), $resultItems;
+  var lastActiveIndex, activeIndex;
+
+  function clear() {
+    $result.html(null);
+    $resultItems = $('.search-result__item'); activeIndex = 0;
+  }
+  function onInputNotEmpty(val) {
+    $result.html(render(searchByQuery(val)));
+    $resultItems = $('.search-result__item'); activeIndex = 0;
+    $resultItems.eq(0).addClass('active');
+  }
+
+  search.clear = clear;
+  search.onInputNotEmpty = onInputNotEmpty;
+
+  function updateResultItems() {
+    lastActiveIndex >= 0 && $resultItems.eq(lastActiveIndex).removeClass('active');
+    activeIndex >= 0 && $resultItems.eq(activeIndex).addClass('active');
+  }
+
+  function moveActiveIndex(direction) {
+    var itemsCount = $resultItems ? $resultItems.length : 0;
+    if (itemsCount > 1) {
+      lastActiveIndex = activeIndex;
+      if (direction === 'up') {
+        activeIndex = (activeIndex - 1 + itemsCount) % itemsCount;
+      } else if (direction === 'down') {
+        activeIndex = (activeIndex + 1 + itemsCount) % itemsCount;
+      }
+      updateResultItems();
+    }
+  }
+
+  // Char Code: 13  Enter, 37  ⬅, 38  ⬆, 39  ➡, 40  ⬇
+  $(window).on('keyup', function(e) {
+    var modalVisible = search.getModalVisible && search.getModalVisible();
+    if (modalVisible) {
+      if (e.which === 38) {
+        modalVisible && moveActiveIndex('up');
+      } else if (e.which === 40) {
+        modalVisible && moveActiveIndex('down');
+      } else if (e.which === 13) {
+        modalVisible && $resultItems && activeIndex >= 0 && $resultItems.eq(activeIndex).children('a')[0].click();
+      }
+    }
+  });
+
+  $result.on('mouseover', '.search-result__item > a', function() {
+    var itemIndex = $(this).parent().data('index');
+    itemIndex >= 0 && (lastActiveIndex = activeIndex, activeIndex = itemIndex, updateResultItems());
+  });
+});
+</script>
+</div></div>
+
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function scrollToAnchor(anchor, duration, callback) {
+      var $root = this;
+      $root.animate({ scrollTop: $(anchor).position().top }, duration, function() {
+        window.history.replaceState(null, '', window.location.href.split('#')[0] + anchor);
+        callback && callback();
+      });
+    }
+    $.fn.scrollToAnchor = scrollToAnchor;
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function affix(options) {
+      var $root = this, $window = $(window), $scrollTarget, $scroll,
+        offsetBottom = 0, scrollTarget = window, scroll = window.document, disabled = false, isOverallScroller = true,
+        rootTop, rootLeft, rootHeight, scrollBottom, rootBottomTop,
+        hasInit = false, curState;
+
+      function setOptions(options) {
+        var _options = options || {};
+        _options.offsetBottom && (offsetBottom = _options.offsetBottom);
+        _options.scrollTarget && (scrollTarget = _options.scrollTarget);
+        _options.scroll && (scroll = _options.scroll);
+        _options.disabled !== undefined && (disabled = _options.disabled);
+        $scrollTarget = $(scrollTarget);
+        isOverallScroller = window.isOverallScroller($scrollTarget[0]);
+        $scroll = $(scroll);
+      }
+      function preCalc() {
+        top();
+        rootHeight = $root.outerHeight();
+        rootTop = $root.offset().top + (isOverallScroller ? 0 :  $scrollTarget.scrollTop());
+        rootLeft = $root.offset().left;
+      }
+      function calc(needPreCalc) {
+        needPreCalc && preCalc();
+        scrollBottom = $scroll.outerHeight() - offsetBottom - rootHeight;
+        rootBottomTop = scrollBottom - rootTop;
+      }
+      function top() {
+        if (curState !== 'top') {
+          $root.removeClass('fixed').css({
+            left: 0,
+            top: 0
+          });
+          curState = 'top';
+        }
+      }
+      function fixed() {
+        if (curState !== 'fixed') {
+          $root.addClass('fixed').css({
+            left: rootLeft + 'px',
+            top: 0
+          });
+          curState = 'fixed';
+        }
+      }
+      function bottom() {
+        if (curState !== 'bottom') {
+          $root.removeClass('fixed').css({
+            left: 0,
+            top: rootBottomTop + 'px'
+          });
+          curState = 'bottom';
+        }
+      }
+      function setState() {
+        var scrollTop = $scrollTarget.scrollTop();
+        if (scrollTop >= rootTop && scrollTop <= scrollBottom) {
+          fixed();
+        } else if (scrollTop < rootTop) {
+          top();
+        } else {
+          bottom();
+        }
+      }
+      function init() {
+        if(!hasInit) {
+          var interval, timeout;
+          calc(true); setState();
+          // run calc every 100 millisecond
+          interval = setInterval(function() {
+            calc();
+          }, 100);
+          timeout = setTimeout(function() {
+            clearInterval(interval);
+          }, 45000);
+          window.pageLoad.then(function() {
+            setTimeout(function() {
+              clearInterval(interval);
+              clearTimeout(timeout);
+            }, 3000);
+          });
+          $scrollTarget.on('scroll', function() {
+            disabled || setState();
+          });
+          $window.on('resize', function() {
+            disabled || (calc(true), setState());
+          });
+          hasInit = true;
+        }
+      }
+
+      setOptions(options);
+      if (!disabled) {
+        init();
+      }
+      $window.on('resize', window.throttle(function() {
+        init();
+      }, 200));
+      return {
+        setOptions: setOptions,
+        refresh: function() {
+          calc(true, { animation: false }); setState();
+        }
+      };
+    }
+    $.fn.affix = affix;
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function toc(options) {
+      var $root = this, $window = $(window), $scrollTarget, $scroller, $tocUl = $('<ul class="toc toc--ellipsis"></ul>'), $tocLi, $headings, $activeLast, $activeCur,
+        selectors = 'h1,h2,h3', container = 'body', scrollTarget = window, scroller = 'html, body', disabled = false,
+        headingsPos, scrolling = false, hasRendered = false, hasInit = false;
+
+      function setOptions(options) {
+        var _options = options || {};
+        _options.selectors && (selectors = _options.selectors);
+        _options.container && (container = _options.container);
+        _options.scrollTarget && (scrollTarget = _options.scrollTarget);
+        _options.scroller && (scroller = _options.scroller);
+        _options.disabled !== undefined && (disabled = _options.disabled);
+        $headings = $(container).find(selectors).filter('[id]');
+        $scrollTarget = $(scrollTarget);
+        $scroller = $(scroller);
+      }
+      function calc() {
+        headingsPos = [];
+        $headings.each(function() {
+          headingsPos.push(Math.floor($(this).position().top));
+        });
+      }
+      function setState(element, disabled) {
+        var scrollTop = $scrollTarget.scrollTop(), i;
+        if (disabled || !headingsPos || headingsPos.length < 1) { return; }
+        if (element) {
+          $activeCur = element;
+        } else {
+          for (i = 0; i < headingsPos.length; i++) {
+            if (scrollTop >= headingsPos[i]) {
+              $activeCur = $tocLi.eq(i);
+            } else {
+              $activeCur || ($activeCur = $tocLi.eq(i));
+              break;
+            }
+          }
+        }
+        $activeLast && $activeLast.removeClass('active');
+        ($activeLast = $activeCur).addClass('active');
+      }
+      function render() {
+        if(!hasRendered) {
+          $root.append($tocUl);
+          $headings.each(function() {
+            var $this = $(this);
+            $tocUl.append($('<li></li>').addClass('toc-' + $this.prop('tagName').toLowerCase())
+              .append($('<a></a>').text($this.text()).attr('href', '#' + $this.prop('id'))));
+          });
+          $tocLi = $tocUl.children('li');
+          $tocUl.on('click', 'a', function(e) {
+            e.preventDefault();
+            var $this = $(this);
+            scrolling = true;
+            setState($this.parent());
+            $scroller.scrollToAnchor($this.attr('href'), 400, function() {
+              scrolling = false;
+            });
+          });
+        }
+        hasRendered = true;
+      }
+      function init() {
+        var interval, timeout;
+        if(!hasInit) {
+          render(); calc(); setState(null, scrolling);
+          // run calc every 100 millisecond
+          interval = setInterval(function() {
+            calc();
+          }, 100);
+          timeout = setTimeout(function() {
+            clearInterval(interval);
+          }, 45000);
+          window.pageLoad.then(function() {
+            setTimeout(function() {
+              clearInterval(interval);
+              clearTimeout(timeout);
+            }, 3000);
+          });
+          $scrollTarget.on('scroll', function() {
+            disabled || setState(null, scrolling);
+          });
+          $window.on('resize', window.throttle(function() {
+            if (!disabled) {
+              render(); calc(); setState(null, scrolling);
+            }
+          }, 100));
+        }
+        hasInit = true;
+      }
+
+      setOptions(options);
+      if (!disabled) {
+        init();
+      }
+      $window.on('resize', window.throttle(function() {
+        init();
+      }, 200));
+      return {
+        setOptions: setOptions
+      };
+    }
+    $.fn.toc = toc;
+  });
+})();
+/*(function () {
+
+})();*/
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
+</script>
+    </div>
+    <script>(function () {
+  var $root = document.getElementsByClassName('root')[0];
+  if (window.hasEvent('touchstart')) {
+    $root.dataset.isTouch = true;
+    document.addEventListener('touchstart', function(){}, false);
+  }
+})();
+</script>
+  </body>
+</html>
+

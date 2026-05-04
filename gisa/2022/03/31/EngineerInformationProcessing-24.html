@@ -1,0 +1,1710 @@
+<!DOCTYPE html><html lang="ko">
+  <head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[정보처리기사 실기] Ⅸ. 소프트웨어 개발 보안 구축 - 소프트웨어 개발 보안 설계 - 백뚱's Develop</title>
+
+<meta name="description" content="Ⅸ. 소프트웨어 개발 보안 구축 - 소프트웨어 개발 보안 설계.1. 소프트웨어 개발 보안 설계  1.1. SW 개발 보안의 개념      소스 코드 등에 존재하는 보안 취약점을 제거하고, 보안을 고려하여 기능을 설계 및 구현하는 등 소프트웨어 개발 과정에서 지켜야 할 일련의 보안 ...">
+
+<meta content="백뚱's Develop" property="og:site_name" />
+
+<meta content="[정보처리기사 실기] Ⅸ. 소프트웨어 개발 보안 구축 - 소프트웨어 개발 보안 설계" property="og:title" />
+<meta content="article" property="og:type" />
+
+
+<meta content="[정보처리기사 실기] Ⅸ. 소프트웨어 개발 보안 구축 - 소프트웨어 개발 보안 설계. (feat.수제비)" property="og:description" />
+
+
+<meta content="https://baekhj.github.io/gisa/2022/03/31/EngineerInformationProcessing-24" property="og:url" />
+
+
+<meta content="https://baekhj.github.io/assets/img/og_default.png" property="og:image" />
+
+
+
+<link rel="canonical" href="https://baekhj.github.io/gisa/2022/03/31/EngineerInformationProcessing-24"><link rel="alternate" type="application/rss+xml" title="백뚱's Develop" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+
+<meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/browserconfig.xml">
+
+<meta name="theme-color" content="#ffffff">
+<!-- end favicons snippet -->
+
+<!--
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+-->
+<link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css" ><!-- start custom head snippets -->
+
+
+<!--서치콘솔 소유권확인-->
+<meta name="google-site-verification" content="d9QBVis3rhONt95u2nqXjSpb-XLTROnZAPoW4nytOkA" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3538678447289819"  crossorigin="anonymous"></script>
+
+<!-- end custom head snippets -->
+<script>(function() {
+  window.isArray = function(val) {
+    return Object.prototype.toString.call(val) === '[object Array]';
+  };
+  window.isString = function(val) {
+    return typeof val === 'string';
+  };
+
+  window.hasEvent = function(event) {
+    return 'on'.concat(event) in window.document;
+  };
+
+  window.isOverallScroller = function(node) {
+    return node === document.documentElement || node === document.body || node === window;
+  };
+
+  window.isFormElement = function(node) {
+    var tagName = node.tagName;
+    return tagName === 'INPUT' || tagName === 'SELECT' || tagName === 'TEXTAREA';
+  };
+
+  window.pageLoad = (function () {
+    var loaded = false, cbs = [];
+    window.addEventListener('load', function () {
+      var i;
+      loaded = true;
+      if (cbs.length > 0) {
+        for (i = 0; i < cbs.length; i++) {
+          cbs[i]();
+        }
+      }
+    });
+    return {
+      then: function(cb) {
+        cb && (loaded ? cb() : (cbs.push(cb)));
+      }
+    };
+  })();
+})();
+(function() {
+  window.throttle = function(func, wait) {
+    var args, result, thisArg, timeoutId, lastCalled = 0;
+
+    function trailingCall() {
+      lastCalled = new Date;
+      timeoutId = null;
+      result = func.apply(thisArg, args);
+    }
+    return function() {
+      var now = new Date,
+        remaining = wait - (now - lastCalled);
+
+      args = arguments;
+      thisArg = this;
+
+      if (remaining <= 0) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+        lastCalled = now;
+        result = func.apply(thisArg, args);
+      } else if (!timeoutId) {
+        timeoutId = setTimeout(trailingCall, remaining);
+      }
+      return result;
+    };
+  };
+})();
+(function() {
+  var Set = (function() {
+    var add = function(item) {
+      var i, data = this._data;
+      for (i = 0; i < data.length; i++) {
+        if (data[i] === item) {
+          return;
+        }
+      }
+      this.size ++;
+      data.push(item);
+      return data;
+    };
+
+    var Set = function(data) {
+      this.size = 0;
+      this._data = [];
+      var i;
+      if (data.length > 0) {
+        for (i = 0; i < data.length; i++) {
+          add.call(this, data[i]);
+        }
+      }
+    };
+    Set.prototype.add = add;
+    Set.prototype.get = function(index) { return this._data[index]; };
+    Set.prototype.has = function(item) {
+      var i, data = this._data;
+      for (i = 0; i < data.length; i++) {
+        if (this.get(i) === item) {
+          return true;
+        }
+      }
+      return false;
+    };
+    Set.prototype.is = function(map) {
+      if (map._data.length !== this._data.length) { return false; }
+      var i, j, flag, tData = this._data, mData = map._data;
+      for (i = 0; i < tData.length; i++) {
+        for (flag = false, j = 0; j < mData.length; j++) {
+          if (tData[i] === mData[j]) {
+            flag = true;
+            break;
+          }
+        }
+        if (!flag) { return false; }
+      }
+      return true;
+    };
+    Set.prototype.values = function() {
+      return this._data;
+    };
+    return Set;
+  })();
+
+  window.Lazyload = (function(doc) {
+    var queue = {js: [], css: []}, sources = {js: {}, css: {}}, context = this;
+    var createNode = function(name, attrs) {
+      var node = doc.createElement(name), attr;
+      for (attr in attrs) {
+        if (attrs.hasOwnProperty(attr)) {
+          node.setAttribute(attr, attrs[attr]);
+        }
+      }
+      return node;
+    };
+    var end = function(type, url) {
+      var s, q, qi, cbs, i, j, cur, val, flag;
+      if (type === 'js' || type ==='css') {
+        s = sources[type], q = queue[type];
+        s[url] = true;
+        for (i = 0; i < q.length; i++) {
+          cur = q[i];
+          if (cur.urls.has(url)) {
+            qi = cur, val = qi.urls.values();
+            qi && (cbs = qi.callbacks);
+            for (flag = true, j = 0; j < val.length; j++) {
+              cur = val[j];
+              if (!s[cur]) {
+                flag = false;
+              }
+            }
+            if (flag && cbs && cbs.length > 0) {
+              for (j = 0; j < cbs.length; j++) {
+                cbs[j].call(context);
+              }
+              qi.load = true;
+            }
+          }
+        }
+      }
+    };
+    var load = function(type, urls, callback) {
+      var s, q, qi, node, i, cur,
+        _urls = typeof urls === 'string' ? new Set([urls]) : new Set(urls), val, url;
+      if (type === 'js' || type ==='css') {
+        s = sources[type], q = queue[type];
+        for (i = 0; i < q.length; i++) {
+          cur = q[i];
+          if (_urls.is(cur.urls)) {
+            qi = cur;
+            break;
+          }
+        }
+        val = _urls.values();
+        if (qi) {
+          callback && (qi.load || qi.callbacks.push(callback));
+          callback && (qi.load && callback());
+        } else {
+          q.push({
+            urls: _urls,
+            callbacks: callback ? [callback] : [],
+            load: false
+          });
+          for (i = 0; i < val.length; i++) {
+            node = null, url = val[i];
+            if (s[url] === undefined) {
+              (type === 'js' ) && (node = createNode('script', { src: url }));
+              (type === 'css') && (node = createNode('link', { rel: 'stylesheet', href: url }));
+              if (node) {
+                node.onload = (function(type, url) {
+                  return function() {
+                    end(type, url);
+                  };
+                })(type, url);
+                (doc.head || doc.body).appendChild(node);
+                s[url] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+    return {
+      js: function(url, callback) {
+        load('js', url, callback);
+      },
+      css: function(url, callback) {
+        load('css', url, callback);
+      }
+    };
+  })(this.document);
+})();
+</script><script>
+  (function() {
+    var TEXT_VARIABLES = {
+      version: '2.2.6',
+      sources: {
+        font_awesome: 'https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css',
+        jquery: 'https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js',
+        leancloud_js_sdk: '//cdn.jsdelivr.net/npm/leancloud-storage@3.13.2/dist/av-min.js',
+        chart: 'https://cdn.bootcss.com/Chart.js/2.7.2/Chart.bundle.min.js',
+        gitalk: {
+          js: 'https://cdn.bootcss.com/gitalk/1.2.2/gitalk.min.js',
+          css: 'https://cdn.bootcss.com/gitalk/1.2.2/gitalk.min.css'
+        },
+        valine: 'https://unpkg.com/valine/dist/Valine.min.js',
+        mathjax: 'https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML',
+        mermaid: 'https://cdn.bootcss.com/mermaid/8.0.0-rc.8/mermaid.min.js'
+      },
+      site: {
+        toc: {
+          selectors: 'h1,h2,h3'
+        }
+      },
+      paths: {
+        search_js: '/assets/search.js'
+      }
+    };
+    window.TEXT_VARIABLES = TEXT_VARIABLES;
+  })();
+</script>
+</head>
+  <body>
+    <div class="root" data-is-touch="false">
+      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
+
+      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
+      <div class="header__title">
+        <div class="header__brand"><?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+ "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="347.000000pt" height="336.000000pt" viewBox="0 0 347.000000 336.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,336.000000) scale(0.100000,-0.100000)"
+fill="#000000" stroke="none">
+<path d="M1556 3350 c-226 -26 -408 -80 -611 -181 -77 -38 -183 -100 -235
+-137 -123 -87 -318 -282 -403 -402 -77 -109 -184 -318 -222 -435 -110 -336
+-110 -694 0 -1030 38 -117 145 -326 222 -435 85 -120 280 -315 403 -402 196
+-140 474 -255 718 -300 166 -30 448 -30 614 0 244 45 522 160 718 300 123 87
+318 282 403 402 77 109 184 318 222 435 68 210 95 436 77 644 -20 229 -66 391
+-168 596 -86 174 -174 296 -319 440 -149 148 -268 234 -450 324 -164 81 -320
+134 -483 162 -134 23 -370 32 -486 19z m374 -61 c517 -64 955 -334 1232 -760
+98 -151 190 -384 225 -569 24 -132 24 -428 0 -560 -145 -774 -843 -1340 -1652
+-1340 -580 0 -1113 288 -1427 771 -98 151 -190 384 -225 569 -24 132 -24 428
+0 560 131 700 713 1235 1447 1329 95 12 303 13 400 0z"/>
+<path d="M750 2160 l0 -300 126 0 c69 0 145 5 170 11 152 39 180 245 40 293
+l-39 13 32 19 c46 27 71 72 71 129 0 40 -5 52 -33 80 -45 45 -89 55 -239 55
+l-128 0 0 -300z m254 189 c32 -25 35 -75 7 -110 -14 -18 -31 -23 -80 -27 l-61
+-4 0 81 0 81 54 0 c39 0 60 -6 80 -21z m33 -264 c19 -22 23 -35 19 -59 -11
+-53 -37 -70 -116 -74 l-70 -4 0 87 0 87 71 -4 c64 -3 74 -7 96 -33z"/>
+<path d="M1429 2433 c-38 -98 -209 -563 -209 -568 0 -3 28 -5 62 -3 l62 3 21
+70 21 70 116 3 116 3 23 -76 22 -75 64 0 c57 0 64 2 58 18 -3 9 -52 143 -108
+297 l-103 280 -67 3 c-65 3 -67 2 -78 -25z m125 -242 c14 -41 26 -78 26 -83 0
+-4 -36 -8 -81 -8 -61 0 -80 3 -76 13 2 6 22 65 43 129 l38 117 13 -47 c6 -26
+23 -80 37 -121z"/>
+<path d="M1870 2160 l0 -300 170 0 170 0 0 50 0 50 -115 0 -115 0 0 75 0 75
+100 0 100 0 0 50 0 50 -100 0 -100 0 0 75 0 75 110 0 110 0 0 50 0 50 -165 0
+-165 0 0 -300z"/>
+<path d="M2320 2160 l0 -300 55 0 55 0 0 140 c0 77 3 140 8 139 4 0 51 -63
+105 -140 l98 -139 75 0 75 0 -120 157 -119 156 76 99 c42 55 92 119 110 144
+l34 44 -69 0 -69 0 -95 -134 c-52 -74 -97 -135 -101 -135 -5 -1 -8 60 -8 134
+l0 135 -55 0 -55 0 0 -300z"/>
+<path d="M1300 1160 l0 -300 60 0 60 0 0 125 0 125 135 0 135 0 0 -125 0 -125
+55 0 55 0 0 300 0 300 -55 0 -55 0 0 -125 0 -125 -135 0 -135 0 0 125 0 125
+-60 0 -60 0 0 -300z"/>
+<path d="M2050 1258 c0 -216 -8 -268 -43 -293 -25 -17 -70 -20 -98 -5 -18 10
+-19 7 -19 -44 0 -51 2 -56 26 -62 40 -10 122 3 159 26 20 12 44 41 59 72 26
+51 26 55 26 280 l0 228 -55 0 -55 0 0 -202z"/>
+</g>
+</svg>
+<a title="JAVA, Spring, 웹개발, 알고리즘 풀이, Dart, Flutter, 데이터베이스.
+" href="/">백뚱's Develop</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
+        <ul><li class="navigation__item"><a href="/archive.html">카테고리</a></li><li class="navigation__item"><a href="/about.html">소개</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+      </nav></div>
+  </header>
+</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
+
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+
+<div class="toc-aside">
+    <!-- side_addsense3.html -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3538678447289819"
+         data-ad-slot="4004543909"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
+</aside></div>
+
+              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
+
+<!-- end custom main top snippet -->
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[정보처리기사 실기] Ⅸ. 소프트웨어 개발 보안 구축 - 소프트웨어 개발 보안 설계</h1></header></div><meta itemprop="headline" content="[정보처리기사 실기] Ⅸ. 소프트웨어 개발 보안 구축 - 소프트웨어 개발 보안 설계"><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%A0%95%EB%B3%B4%EC%B2%98%EB%A6%AC%EA%B8%B0%EC%82%AC+%EC%8B%A4%EA%B8%B0">정보처리기사 실기</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>baekhj</span></li><li><i class="far fa-calendar-alt"></i> <span>2022년 03월 31일</span>
+            </li></ul></div><meta itemprop="author" content="baekhj"/><meta itemprop="datePublished" content="2022-03-31T13:00:00+09:00">
+    <meta itemprop="keywords" content="정보처리기사 실기"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+
+<div style="width: 100%;">
+    <!-- post_top_addsense.html -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3538678447289819"
+         data-ad-slot="7562028429"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody"><h1 id="ⅸ-소프트웨어-개발-보안-구축---소프트웨어-개발-보안-설계">Ⅸ. 소프트웨어 개발 보안 구축 - 소프트웨어 개발 보안 설계.</h1>
+
+<p><br /></p>
+
+<h2 id="1-소프트웨어-개발-보안-설계">1. 소프트웨어 개발 보안 설계</h2>
+<blockquote>
+  <h3 id="11-sw-개발-보안의-개념">1.1. SW 개발 보안의 개념</h3>
+  <ul>
+    <li>소스 코드 등에 존재하는 보안 취약점을 제거하고, 보안을 고려하여 기능을 설계 및 구현하는 등 소프트웨어 개발 과정에서 지켜야 할 일련의 보안 활동.</li>
+    <li>SW 개발 보안 생명주기
+      <ul>
+        <li>요구사항 명세 : 요구사항 중 보안 항목 식별 / 요구사항 명세서.</li>
+        <li>설계 : 위협원 도출을 위한 위협모델링 / 보안설계 검토 및 보안설계서 작성 / 보안통제수립.</li>
+        <li>구현 : 표준 코딩 정의서 및 SW 개발 보안 가이드를 준수해 개발 / 소스 코드 보안 약점 진단 및 개선.</li>
+        <li>테스트 : 모의침투 테스트 또는 동적분석을 통한 보안취약점 진단 및 개선.</li>
+        <li>유지보수 : 지속적인 개선 / 보안패치.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p><br /></p>
+
+  <h3 id="12-sw-개발-보안의-구성요소">1.2. SW 개발 보안의 구성요소</h3>
+  <ul>
+    <li>SW 개발 보안의 3대 요소    <strong><em>( Tip. 기무가 )</em></strong>
+      <ul>
+        <li><span style="color:red">기</span>밀성(Confidentiality) : 인가되지 않은 개인 혹은 시스템 접근에 따른 정보 공개 및 노출을 차단하는 특성.</li>
+        <li><span style="color:red">무</span>결성(Integrity) : 정당한 방법을 따르지 않고선 데이터가 변경 될 수 없으며, 데이터의 정확성 및 완전성과 고의/악의로 변경되거나 웨손 또는 파괴되지 않음을 보장하는 특성.</li>
+        <li><span style="color:red">가</span>용성(Availability) : 권한을 가진 사용자나 애플리케이션이 원하는 서비스를 지속 사용할 수 있도록 보장하는 특성.</li>
+      </ul>
+    </li>
+    <li>SW 개발 보안 용어    <strong><em>( Tip. 자위취위 )</em></strong>
+      <ul>
+        <li><span style="color:red">자</span>산(Assets) : 조직의 데이터 또는 조직의 소유자가 가치를 부여한 대상 (ex. 서버의 하드웨어, 기업의 중요 데이터).</li>
+        <li><span style="color:red">위</span>협(Threat) : 조직이나 기업의 자산에 악영향을 끼칠 수 있는 사건이나 행위 (ex. 해킹, 삭제, 자산의 불법적인 유출, 위/변조, 파손).</li>
+        <li><span style="color:red">취</span>약점(Vulnerability) : 위협이 발생하기 위한 사전 조건에 따른 정황 (ex. 평문 전송, 입력값 미검증, 비밀번호를 공유).</li>
+        <li><span style="color:red">위</span>험(Risk) : 위협이 취약점을 이용하여 조직의 자산 손실 피해를 가져올 가능성.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p><br /></p>
+
+  <h3 id="13-sw-개발-보안을-위한-공격기법의-이해">1.3. SW 개발 보안을 위한 공격기법의 이해</h3>
+  <h4 id="131-dosdenial-of-service-공격">1.3.1. Dos(Denial of Service) 공격</h4>
+  <ul>
+    <li>시스템을 악의적으로 공격해 해당 시스템의 자원을 부족하게 하여 원래 의도된 용도로 사용하지 못하게 하는 공격.</li>
+    <li>특정 서버에게 수많은 접속 시도를 만들어 다른 이용자가 정상 이용 못하게 하거나, 서버의 TCP 연결을 소진시키는 등의 공격.</li>
+    <li>Dos 공격의 종류
+      <ul>
+        <li>지역내 시스템 공격 : 실제 대상 시스템에 접근하여 서버 하드웨어에 직접 과부하를 주는 공격 (ex. 메모리 고갈, 프로세스 서비스 거부, 디스크 서비스 거부 등).</li>
+        <li>원격 네트워크 공격 : 공격자가 목표 시스템에 접근하지 않고 원격지에서 인터넷 등을 이용한 공격 / 서비스를 제공받지 못하거나 실제 시스템에 영향.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4 id="132-ddosdistributed-dos-공격">1.3.2. DDos(Distributed Dos) 공격</h4>
+  <ul>
+    <li>Dos의 다른 형태로, 여러대의 공격자를 분산 배치하여 동시에 동작하게 함으로써 특정 사이트를 공격하는 기법.</li>
+    <li>취약한 인터넷 시스템에 대한 액세스가 이루어지면, 침입한 시스템에 소프트웨어를 설치하고 이를 실행시켜 원격 공격을 개시.</li>
+    <li>DDos 공격 구성요소      <strong><em>( Tip. HAMAD(하마드) )</em></strong>
+      <ul>
+        <li>핸들러(<span style="color:red">H</span>andler) : 마스터 시스템의 역할을 수행하는 프로그램.</li>
+        <li>에이전트(<span style="color:red">A</span>gent) : 공격 대상에게 직접 공격을 가하는 시스템.</li>
+        <li>마스터(<span style="color:red">M</span>aster) : 공격자에게서 직접 명령을 받는 시스템 / 여러 대의 에이전트를 관리하는 역할.</li>
+        <li>공격자(<span style="color:red">A</span>ttacker) : 공격을 주도하는 해커의 컴퓨터.</li>
+        <li>데몬(<span style="color:red">D</span>aemon) 프로그램 : 에이전트 시스템의 역할을 수행하는 프로그램.</li>
+      </ul>
+    </li>
+    <li>DDos 공격의 대응 방안
+      <ul>
+        <li>차단 정책 업데이트 : 공격 규모를 확인하여 가용성이 침해될 수 있는 지점을 확인 및 데이터 기반 차단 정책 업데이트.</li>
+        <li>좀비 PC IP 확보 : 공격자는 대부분 Source IP를 위조하므로 IP 위변조 여부를 확인하는 절차 필요.</li>
+        <li>보안 솔루션 운영 : 방화벽, 침입 탐지시스템 등의 보안 솔루션 운영.</li>
+        <li>홈페이지 보안 관리 : 홈페이지에 대한 모의 해킹 등을 수행하여 보안 유지.</li>
+        <li>시스템 패치 : 시스템에 존재하는 취약점을 패치를 통해 해결.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4 id="133-자원-고갈-공격">1.3.3. 자원 고갈 공격</h4>
+  <ul>
+    <li>서버 간 핸드셰이크(Handshake)를 통해 통신이 연결되는 정상 트래픽과 달리 Dos공격은 정상 접속을 시도하는 오픈된 소켓에 트래픽을 집중시킨다.</li>
+    <li>공격이 임계치에 도달하면 사용자들은 네트워크에 전혀 접속 할 수 없게 된다.</li>
+    <li>자원 고갈 공격 기법</li>
+    <li>
+      <ul>
+        <li>SYN 플러딩 (SYN Flooding)
+          <ul>
+            <li>TCP 프로토콜의 구조적인 문제를 이용한 공격.</li>
+            <li>서버의 동시 가용자 수를 SYN패킷만 보내 점유하여 다른 사용자가 서버를 사용 불가능하게 하는 공격.</li>
+            <li>공격자는 ACK를 발송하지 않고 계속 새로운 연결 요청을 하게되어 서버는 자원할당을 해지하지 않고 자원만 소비하여 자원이 고갈.</li>
+            <li>SYN 플러딩 대응 방안
+              <ol>
+                <li>TCP연결 타임아웃을 짧게 가져가서 연결 요청 대기 시간을 줄인다.</li>
+                <li>Backlog Queue를 늘려준다.</li>
+                <li>Syncookie 기능을 활성화 시켜 준다.</li>
+                <li>Anti-DDoS, 방화벽, 침입 차단시스템 등 보안 장비를 통해 침입 탐지 및 차단을 수행 한다.</li>
+                <li>최신 시스템 및 애플리케이션 패치 및 업데이트를 수행한다.</li>
+              </ol>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <div style="width: 100%; text-align: right;"><img src="/assets/img/posts/2022/03/31/gisa24/syn_flooding.jpeg" style="width:90%;" /></div>
+
+  <ul>
+    <li>
+      <ul>
+        <li>UDP 플러딩 (UDP Flooding)
+          <ul>
+            <li>대량의 UDP 패킷을 만들어 임의의 포트번호로 전송하여 응답 메시지(ICMP Destination Unreachable)를 생성하게 하여 지속해서 자원을 고갈시키는 공격.</li>
+            <li>ICMP 패킷은 변조되어 공격자에게 전달되지 않아 대기함.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <div style="width: 100%; text-align: right;"><img src="/assets/img/posts/2022/03/31/gisa24/udp_flooding.jpeg" style="width:90%;" /></div>
+
+  <ul>
+    <li>
+      <ul>
+        <li>스머프 (Smurf)
+          <ul>
+            <li>출발지 주소를 공격 대상의 IP로 설정하여 네트워크 전체에게 ICMP Echo 패킷을 직접 브로드캐스팅(Directed Broadcasting)하여 마비시키는 공격.</li>
+            <li>바운스(Bounce) 사이트라고 불리는 제 3의 사이트를 이용해 공격.</li>
+            <li>스머프 대응 방안
+              <ol>
+                <li>다른 네트워크로부터 자신의 네트워크로 들어오는 직접 브로드캐스트(Directed Broadcast) 패킷을 허용하지 않도록 라우터를 설정.</li>
+                <li>브로드캐스트 주소로 전송된 ICMP Echo Request 메시지에 대해 응답하지 않도록 시스템을 설정.</li>
+              </ol>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <div style="width: 100%; text-align: right;"><img src="/assets/img/posts/2022/03/31/gisa24/smurf.jpeg" style="width:90%;" /></div>
+
+  <ul>
+    <li>
+      <ul>
+        <li>PoD (Ping of Death)
+          <ul>
+            <li>큰 사이즈의 패킷을 의도적으로 목표시스템으로 발생시켜 시스템이 서비스 할 수 없는 상태로 만드는 공격.</li>
+            <li>PoD 대응 방안
+              <ol>
+                <li>보통 ICMP 패킷은 분할하지 않으므로 패킷 중 분할이 일어난 패킷을 공격으로 의심하여 탐지하도록 설정.</li>
+                <li>현재 시스템 대부분은 반복적으로 들어오는 일정 수 이상의 ICMP 패킷을 무시하도록 설정되어 있지만, 취약점을 가지고 있다면 패치가 필요.</li>
+              </ol>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <div style="width: 100%; text-align: right;"><img src="/assets/img/posts/2022/03/31/gisa24/Pod.jpeg" style="width:90%;" /></div>
+
+  <h4 id="134-애플리케이션-공격">1.3.4. 애플리케이션 공격</h4>
+  <ul>
+    <li>애플리케이션 공격 기법
+      <ul>
+        <li>Slowloris (Slow HTTP Header DoS)
+          <ul>
+            <li>HTTP GET 메소드를 사용하여 헤더의 최종 끝을 알리는 개행 문자열인 \r\n\r\n(Hex: 0d 0a 0d 0a)을 전송하지 않고, \r\n(Hex: 0d 0a)만 전송하여 대상 웹서버와 연결상태를 장시간 지속시키고 연결 자원을 모두 소진시키는 서비스 거부 공격.</li>
+          </ul>
+        </li>
+        <li>RUDY (Slow HTTP POST DoS)
+          <ul>
+            <li>요청 헤더의 Content-length를 비정상적으로 크게 설정하여 메시지 바디 부분을 매우 소량으로 보내 계속 연결 상태를 유지시키는 공격.</li>
+            <li>ex. Content-Length: 9999999 설정 이후 1바이트 씩 정송하여 연결 유지</li>
+          </ul>
+        </li>
+        <li>HTTP GET 플러딩 (Flooding)
+          <ul>
+            <li>Cache Control Attack 공격.</li>
+            <li>Http 캐시 옵션을 조작하여 캐싱서버가 아닌 웹서버가 직접 처리하도록 유도, 웹서버 자원을 소진시키는 서비스 거부 공격.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <div style="width: 100%; text-align: right;"><img src="/assets/img/posts/2022/03/31/gisa24/http_get_flooding.jpeg" style="width:90%;" /></div>
+
+  <ul>
+    <li>애플리케이션 공격 대응 방안
+      <ul>
+        <li>동시연결에 대한 임계치(Threshold) 설정을 통해 차단.</li>
+        <li>연결 타임아웃 설정을 통해 차단.</li>
+        <li>읽기 타임아웃 설정을 통해 차단.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4 id="135-네트워크-서비스-공격">1.3.5. 네트워크 서비스 공격</h4>
+  <ul>
+    <li>네트워크 서비스 공격 기법
+      <ul>
+        <li>네트워크 스캐너(Scanner), 스니퍼(Sniffer)
+          <ul>
+            <li>네트워크 하드웨어 및 소프트웨어 구성의 취약점 파악을 위해 공격자가 사용하는 공격 도구.</li>
+          </ul>
+        </li>
+        <li>패스워드 크래킹(Password Cracking)
+          <ul>
+            <li>사전(Dictionary) 크래킹과 무차별(Brute Force) 크래킹 방법을 사용해 네트워크 패스워드를 탐색.</li>
+            <li>대표적인 공격 도구로 John the Ripper 가 있음.</li>
+          </ul>
+        </li>
+        <li>IP 스푸핑 (IP Spoofing)
+          <ul>
+            <li>서버에 대한 인증되지 않은 액세스 권한을 입수하는데 사용하는 기법.</li>
+            <li>침입자가 패킷 헤더 수정을 통해 인증된 호스트의 IP 어드레스를 위조.</li>
+            <li>타깃 서버로 메시지를 발송한 이후 패킷은 해당 포트에서 유입되는것 처럼 표시.</li>
+          </ul>
+        </li>
+        <li>트로이 목마 (Trojan Horses)
+          <ul>
+            <li>악성 루틴이 숨어있는 프로그램으로서 겉보기에는 정상적인 프로그램처럼 보이지만 실행하면 악성 코드를 실행.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>네트워크 서비스 공격 대응 방안
+      <ul>
+        <li>방화벽, 침입 차단 시스템 등 네트워크 보안 장비를 통해 방어.</li>
+        <li>네트워크 접속 차단 시스템을 통해 방어.</li>
+        <li>내부 호스트 및 시스템의 악성 코드 감염방지를 위한 백신 설치 등을 통해 방어.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4 id="136-취약점-공격">1.3.6. 취약점 공격</h4>
+  <ul>
+    <li>취약점 공격 기법
+      <ul>
+        <li>랜드 어택 (Land Attack)
+          <ul>
+            <li>출발지(Source) IP와 목적지(Destination) IP를 같은 패킷 주소로 만들어 보냄으로써 수신자가 자기 자신에게 응답을 보내게 하여 시스템의 가용성을 침해하는 공격 기법.</li>
+            <li>랜드어택 대응 방안
+              <ul>
+                <li>수신되는 패킷 중 출발지 주소와 목적지 주소가 동일한 패킷들을 차단.</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>봉크(Bonk) / 보잉크(Boink)
+          <ul>
+            <li>프로토콜의 오류 제어를 이용한 공격기법으로서 시스템의 패킷 재정송과 재조립이 과부하를 유발.</li>
+            <li>ex. 봉크 : 같은 시퀀스 번호를 계속 보냄 / 보잉크 : 일정한 간격으로 시퀀스 번호에 빈 공간 생성.</li>
+          </ul>
+        </li>
+        <li>티어드롭 (Tear Drop)
+          <ul>
+            <li>IP 패킷의 재조합 과정에서 잘못된 Fragment Offset 정보로 인해 수신시스템이 문제를 발생하도록 만드는 Dos 공격.</li>
+            <li>공격자는 IP Fragment Offset 값을 서로 중첩되도록 조작하여 전송하고, 이를 수신한 시스템이 재조합하는 과정에서 오류가 발생, 시스템의 기능을 마비시키는 공격 방식.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>✱ 봉크 / 보잉크 / 티어드롭  대응 방안 : 과부하가 걸리거나 반복되는 패킷 재정송 요구를 하지 않고 버린다.</p>
+
+  <p><br /></p>
+
+  <h3 id="14-sw-개발-보안을-위한-암호화-알고리즘">1.4. SW 개발 보안을 위한 암호화 알고리즘</h3>
+  <h4 id="141-암호-알고리즘encryption-algorithm-개념">1.4.1. 암호 알고리즘(Encryption Algorithm) 개념</h4>
+  <ul>
+    <li>데이터의 무결성 및 기밀성 확보를 위해 정보를 쉽게 해독할 수 없는 형태로 변환하는 기법.</li>
+  </ul>
+
+  <h4 id="142-암호-알고리즘-방식">1.4.2. 암호 알고리즘 방식</h4>
+  <ul>
+    <li>대칭키 암호 방식
+      <ul>
+        <li>암호화 알고리즘의 한 종류로, 암호화와 복호화에 같은 암호키를 쓰는 알고리즘.</li>
+        <li>대칭 키는 블록 암호화와 스트림 암호화 알고리즘으로 나뉨.</li>
+        <li>블록 암호 방식
+          <ul>
+            <li>긴 평문을 암호화 하기 위해 고정 길이의 블록을 암호화 하는 블록 암호 알고리즘을 반복하는 방법.</li>
+            <li>ex. DES, AES, SEED
+              <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>✱ DES [Data Encryption Standard] : 56bit의 키를 이용, 64bit의 평문블록을 64bit의 암호문 블록으로 만드는 블록 암호 방식의 미국표준(NIST) 암호화 알고리즘.    
+✱ AES [Advanced Encryption Standard] : DES를 대체한 암호 알고리즘이며, 암호화와 복호화 과정에서 동일한 키를 사용하는 대칭 키 암호화 알고리즘.    
+✱ SEED : KISA, ETRI에서 개발하고 TTA에서 인증한 안전성, 신뢰성이 우수(3DES보다)한 고속 블록단위의 128bit 대칭키 암호화 알고리즘.    
+</code></pre></div>              </div>
+            </li>
+          </ul>
+        </li>
+        <li>스트림 암호 방식
+          <ul>
+            <li>매우 긴 주기의 난수열을 발생시켜 평문과 더불어 암호문을 생성하는 방식.</li>
+            <li>ex. RC4</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>비대칭키 암호 방식
+      <ul>
+        <li>공개키를 이용해 암호화하고 공개 키에 해당하는 개인 키를 이용해 복호화하는 암호 방식.</li>
+        <li>비대칭키 암호 방식에서는 공개 키와 개인 키가 존재하며, 공개 키는 누구나 알수 있지만 그에 대응하는 개인키는 키 소유자만이 알수 있어야함.</li>
+        <li>비밀 키는 키의 소유자만이 알 수 있어야 한다. 공개 키는 보안 타협 없이 공개적으로 배포가 가능.</li>
+        <li>비대칭키 암호를 구성하는 알고리즘은 대칭키 암호 방식과 비교하여 공개키 암호방식이라고 부름.</li>
+        <li>ex. 디피-헬만, RSA
+          <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>✱ 디피-헬만(Diffie-Hellman) : 암호 키를 교환하는 방법으로서 두사람이 암호화 되지 않은 통신망을 통해 공통의 비밀 키를 공유할 수 있도록 하는 방식.    
+✱ RSA(Rivest Shamir Adleman) : 현재 비대칭키 암호 방식 중에서 가장 널리 쓰이고 있는 방식 / 소인수 분해의 어려움을 이용한 방식.   
+</code></pre></div>          </div>
+        </li>
+      </ul>
+    </li>
+    <li>해시 방식
+      <ul>
+        <li>단방향 알고리즘으로서 임의의 데이터를 고정된 길이의 데이터로 매핑하는 함수.</li>
+        <li>해시 함수의 결과로 원본 데이터를 유추하기 어려운 것을 이용.</li>
+        <li>연산에 걸리는 시간이 빠른것이 장점, 동일한 결과를 갖는 값이 발생하는 해시 충돌 문제 발생 가능.</li>
+        <li>ex. SHA, MD5
+          <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>✱ SHA(Secure Hash Algorithm) : 미국 국가 표준으로 지정된 해시 암호 알고리즘 / SHA-224, SHA-256, SHA-384, SHA-512등을 통칭해 SHA-2로 부름.   
+✱ MD5(Message-Digest Algorithm 5) : RFC 1321로 지정되어 있으며, MD4를 대체하기 위해 고안한 128bit 해시암호화 알고리즘.   
+</code></pre></div>          </div>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <p><br /></p>
+
+  <h3 id="15-정보에-대한-보안-항목-식별">1.5. 정보에 대한 보안 항목 식별</h3>
+  <h4 id="151-법률적-검토">1.5.1. 법률적 검토</h4>
+  <ul>
+    <li>소프트웨어 개발 보안 활동 관련 법규 및 규정
+      <ul>
+        <li>개인정보보호법
+          <ul>
+            <li>개인정보 처리 과정상의 정보 주체와 개인정보 처리자의 권리, 의무 등 규정.</li>
+          </ul>
+        </li>
+        <li>정보통신망 이용 촉진 및 정보보호 등에 관현 법률
+          <ul>
+            <li>정보통신망을 통하여 수집, 처리, 보관, 이용되는 개인정보의 보호에 대한 규정.</li>
+          </ul>
+        </li>
+        <li>신용정보의 이용 및 보호에 관한 법률
+          <ul>
+            <li>개인 신용정보의 취급 단계별 보호조치 및 의무사항에 관한 규정.</li>
+          </ul>
+        </li>
+        <li>위치정보의 보호 및 이용 등에 관한 법률
+          <ul>
+            <li>개인 위치정보 수집, 이용, 제공 파기 및 정보 주체의 권리 등 규정.</li>
+          </ul>
+        </li>
+        <li>개인정보의 안전성 확보조치 기준
+          <ul>
+            <li>개인정보 처리자가 개인정보를 처리함에 있어서 분실, 도난, 유출, 변조, 훼손되지 않도록 안전성을 확보하기 위해 취해야 하는 세부적인 기준 규정.</li>
+            <li>개인정보 처리시스템의 보호수준을 진단, 암호화에 상응하는 조치필요 여부를 판단할 수 있는 기준을 규정.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>개인정보보보 관련 법령    <strong><em>( Tip. 개망신 )</em></strong>
+      <ul>
+        <li><span style="color:red">개</span>인정보 보호법 / 정보통신<span style="color:red">망</span>법 / <span style="color:red">신</span>용정보법</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4 id="152-개인정보-보호법-검토">1.5.2. 개인정보 보호법 검토</h4>
+  <ul>
+    <li>24조 고유 식별정보의 처리 제한
+      <ul>
+        <li>고유 식별정보(주민등록번호, 여권번호, 운전면허번호, 외국인등록번호)를 처리 하는 경우.</li>
+        <li>해당 정보가 분실, 도난, 유출, 변조, 훼손되지 않도록 암호화 등 안전성 확보에 필요한 조치 필요.</li>
+      </ul>
+    </li>
+    <li>29조 안전조치 의무화
+      <ul>
+        <li>개인정보가 분실, 도난, 유출, 변조 또는 훼손되지 않도록 내부관리 계획 수립.</li>
+        <li>접속기록보관 등 안전성 확보에 필요한 기술적, 관리적, 물리적 조치 수행.</li>
+      </ul>
+    </li>
+    <li>30조 개인정보의 안전성 확보조치
+      <ul>
+        <li>개인정보를 안전하게 저장, 전송할 수 있는 암호화 기술의 적용 또는 이에 상응하는 조치 수행.</li>
+      </ul>
+    </li>
+    <li>고유 식별정보의 종류    <strong><em>( Tip. 주여운외 )</em></strong>
+      <ul>
+        <li><span style="color:red">주</span>민등록번호 / <span style="color:red">여</span>권번호 / <span style="color:red">운</span>전면허번호 / <span style="color:red">외</span>국인 등록번호</li>
+      </ul>
+    </li>
+    <li>개인정보보호 법령 내 정보사고       <strong><em>( Tip. 분도유변훼 )</em></strong>
+      <ul>
+        <li><span style="color:red">분</span>실 / <span style="color:red">도</span>난 / <span style="color:red">유</span>출 / <span style="color:red">변</span>조 / <span style="color:red">훼</span>손</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4 id="153-정보통신망-이용-촉진-및-정보보호-등에-관한-법률-검토">1.5.3. 정보통신망 이용 촉진 및 정보보호 등에 관한 법률 검토</h4>
+  <ul>
+    <li>15조 개인정보의 보호조치
+      <ul>
+        <li>비밀번호 및 바이오정보 일방향 암호화 저장.</li>
+        <li>주민번호, 계좌번호, 금융정보 암호화 저장.</li>
+        <li>개인정보 및 인증정보 송수신시 보안 강화된 서버 인프라 구축.</li>
+      </ul>
+    </li>
+    <li>28조 개인정보의 보호조치
+      <ul>
+        <li>개인정보 취급시 개인정보의 분실, 도난, 누출, 변조, 훼손 방지를 위해 기술적, 관리적 조치 수행.</li>
+        <li>개인정보를 안전하게 전송, 저장 할수 있는 암호화 기술 등을 이용한 보안 조치 필요.</li>
+      </ul>
+    </li>
+    <li>6조 개인정보의 암호화
+      <ul>
+        <li>비밀번호, 바이오 정보는 일방향 암호화하여 저장.</li>
+        <li>주민번호, 신용카드번호, 계좌번호에 대해 안전한 암호화 알고리즘 으로 암호화 하여 저장.</li>
+        <li>서버는 SSL 인증서를 통해 암호화하여 송수신.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>✱ 일방향 암호화 : 암호화는 수행하지만 절대로 복호화가 불가능한 알고리즘.
+✱ 암호화 알고리즘 : 국내 및 미국, 일본, 유럽 등의 국외 암호 연구 관련 기관에서 권고하는 암호 알고리즘을 의미.
+✱ SSL (Secure Socket Layer) : 응용계층과 TCP/IP 계층 사이에서 웹 데이터 암호화 및 전송시 기밀성을 보장하는 공개키 기반의 보안 프로토콜.</p>
+
+  <h4 id="154-개인정보-등급-식별">1.5.4. 개인정보 등급 식별</h4>
+  <ul>
+    <li>개인정보 등급 분류
+      <ul>
+        <li>1등급
+          <ul>
+            <li>고유식별정보 : 개인에게 부여된 식별 정보 / 주민번호, 여권번호, 운전면허번호, 외국인등록번호.</li>
+            <li>민감정보 : 유전자 검사정보, 범죄경력정보 등… 사상/신념, 노동조합, 정치적 견해 등… 병력, 신체/정신적 장애, 성적 취향 등.</li>
+            <li>인증정보 : 비밀번호, 바이오정보(지문,홍채,정맥 등).</li>
+            <li>신용정보 : 신용정보, 신용카드번호, 계좌번호.</li>
+          </ul>
+        </li>
+        <li>2등급
+          <ul>
+            <li>개인 식별정보 : 이름, 주소, 전화번호, 핸드폰번호, 이메일주소, 생년월일, 성별 등.</li>
+            <li>개인 관련 정보 : 학력, 직업, 키, 몸무게, 혼인 여부, 가족 상황, 취미 등.</li>
+            <li>기타 개인 정보 : 해당 사업의 특성에 따라 별도 정의.</li>
+          </ul>
+        </li>
+        <li>3등급
+          <ul>
+            <li>자동생성정보 : IP정보, MAC 주소, 사이트 방문 기록, 쿠키 등.</li>
+            <li>가공정보 : 통계 정보, 가입자 성향 등.</li>
+            <li>제한적 본인 식별 정보 : 회원번호, 사번, 내부용 개인 식별정보 등.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <p><br /></p>
+
+  <h3 id="16-자산에-대한-보안-항목-식별">1.6. 자산에 대한 보안 항목 식별</h3>
+  <h4 id="161-정보자산-주요-용어">1.6.1. 정보자산 주요 용어</h4>
+  <ul>
+    <li>자산(Asset) : 조직에서 보유한 갖치 있는 모든것.</li>
+    <li>사용자(User) : 정보처리 기기 및 시스템을 활용해 자산을 사용하는 사람과 기관.</li>
+    <li>소유자(Owner) : 자산의 소유 권한 및 관리에 대한 최종 책임자 / 자산의 취득,사용,폐기 등 관리 권한 보유.</li>
+    <li>관리자(Admin) : 자산의 소유자로부터 관리위임을 받은 자 / 자산의 보관 및 운영 책임.</li>
+  </ul>
+
+  <h4 id="162-정보자산의-식별">1.6.2. 정보자산의 식별</h4>
+  <ul>
+    <li>기업이 가진 중요자산을 보호하기 위해 자산의 식별과 평가를 수행.</li>
+    <li>위험을 분석하기 위해 적절한 분류기준에 따라 중복, 누락을 최소화하여 자산목록을 작성.</li>
+  </ul>
+
+  <h4 id="163-정보자산의-분류-기준">1.6.3. 정보자산의 분류 기준</h4>
+  <ul>
+    <li>소프트웨어 : 상용 또는 자체 개발된 소프트웨어 자산 / 애플리케이션, 개발도구, 유틸리티.</li>
+    <li>하드웨어 : 대외서비스를 위해 사용되거나 개인이 사용하는 자산 / 서버, PC, 노트북, 스위치.</li>
+    <li>데이터 : 전자적 형태로 저장되는 데이터 / 데이터베이스, 데이터 파일.</li>
+    <li>문서 : 종이매체로된 정보자산, 업무목적문서∙기록물 / 결재문서, 계약서, 합의서.</li>
+    <li>시설 : 시스템 설치, 운영 장소 등 물리적 공간 및 시설 / 사무실, 전산실, 통신실.</li>
+    <li>지원설비 : 정보시스템 운영을 지원하기 위한 설비 / UPS, 항온항습기, 발전기.</li>
+    <li>인력 : 시스템 운영 업무 수행 중인 인력 / 내부직원, 협력업체.</li>
+  </ul>
+
+  <h4 id="164-자산-목록-작성">1.6.4. 자산 목록 작성</h4>
+  <ul>
+    <li>자산 목록은 반드시 포함되어야 할 항목을 명시하고 주기적으로 갱신되어 최신 상태를 유지.</li>
+  </ul>
+
+  <p><br /></p>
+
+  <h3 id="17-기능에-대한-보안항목-식별">1.7. 기능에 대한 보안항목 식별</h3>
+  <h4 id="171-입력데이터-검증-및-표현">1.7.1. 입력데이터 검증 및 표현</h4>
+  <ul>
+    <li>DBMS 조회∙결과 검증
+      <ul>
+        <li>SQL문 생성시 사용되는 입력값에 대한 검증 방법 설계.</li>
+      </ul>
+    </li>
+    <li>XML 조회∙결과 검증
+      <ul>
+        <li>디렉터리 서비스 조회(LDAP)시 사용되는 입력 값에 대한 검증 방법 설계.</li>
+      </ul>
+    </li>
+    <li>웹 서비스 요청∙결과 검증
+      <ul>
+        <li>사용자 인증이 필요한 결제 등 웹서비스 요청에 대한 유효성 검증 방법 설계.</li>
+        <li>유효하지 않은 요청에 대한 처리 방법 설계.</li>
+      </ul>
+    </li>
+    <li>허용된 범위내 메모리 접근 검증
+      <ul>
+        <li>허용된 범위의 메모리 버퍼에만 접근하여 버퍼 오버플로우가 발생하지 않도록 처리 방법 설계.</li>
+      </ul>
+    </li>
+    <li>보안 기능 입력값 검증
+      <ul>
+        <li>보안기능(인증∙인가, 권한 부여 등) 동작을 위해 사용되는 입력값 검증 방법 설계.</li>
+        <li>함수의 외부 입력값 및 수행결과에 대한 처리 방법 설계.</li>
+      </ul>
+    </li>
+    <li>업로드∙다운로드 파일 검증
+      <ul>
+        <li>업로드∙다운로드 파일의 무결성 실행 권한 등에 관현 유효성 검증 방법 설계.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>✱ LDAP(Lightweight Directory Access Protocol) : 사용자 정보를 유지를 위한 질의 및 디렉터리 서비스를 수정하기 위한 인터넷 프로토콜을 가리킨다.</p>
+
+  <h4 id="172-보안-기능">1.7.2. 보안 기능</h4>
+  <ul>
+    <li>인증 관리
+      <ul>
+        <li>인증대상 및 방식 : 중요정보∙기능과 인증방식을 정의 / 인증 기능이 우회되지 않고 수행될 수 있도록 설계.</li>
+        <li>인증수행 제한 : 인증 반복시도 제한 및 인증실패에 대한 인증제한 기능 설계.</li>
+        <li>비밀번호 관리 : 안전한 비밀번호 규칙(복잡도 만족)을 설정 / 패스워드의 주기적 변경이 적용되도록 설계.</li>
+      </ul>
+    </li>
+    <li>권한 관리
+      <ul>
+        <li>중요자원 접근통제 : 중요자원(설정값, 민감데이터등)을 정의 / 접근통제 실패 시 대응 방안 설계.</li>
+      </ul>
+    </li>
+    <li>암호화
+      <ul>
+        <li>암호키 관리 : 암호키 생성 분배 접근 파기 등 안전하게 암호키 생명주기를 관리 할 수 있는 방법 설계.</li>
+        <li>암호연산 : 충분한 암호 키 길이, 솔트, 난수 값을 기반으로 암호연산 수행 방법 설계.</li>
+      </ul>
+    </li>
+    <li>중요정보 처리
+      <ul>
+        <li>중요정보 저장 : 중요정보 비밀번호 개인정보 등 저장 시 안전한 저장 및 관리 방법 설계.</li>
+        <li>중요정보 전송 : 중요정보 비밀번호 개인정보 등 전송시 안전한 전송방법 설계.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>✱ 솔트(Salt) : 일방향 해시 함수에서 다이제스트를 생성할 때 추가되는 바이트 단위의 임의의 문자열.
+✱ 난수 : 범위 내에서 무작위로 추출된 수.</p>
+
+  <h4 id="173-에러-처리-및-세션-통제">1.7.3. 에러 처리 및 세션 통제</h4>
+  <ul>
+    <li>에러 또는 오류 상황을 처리하지 않고나 불충분하게 처리되어 중요정보 유출 등 보안 약점 발생하지 않도록 설계.</li>
+    <li>HTTP를 이용하여 연결을 유지하는 경우 세션을 안전하게 할당하고 관리하여 세션정보 노출이나 세션 하이재킹과 같은 침해사고 발생하지 않도록 설계.</li>
+  </ul>
+
+  <p>✱ 세션 하이재킹(Session Hijacking) : TCP신뢰성 기반의 연결을 이용한 공격 방법으로, 통신 내용을 엿보거나, 세션을 가로채어 정상적인 인증과정을 무시하고 불법으로 시스템에 접근할 수 있는 공격.</p>
+
+  <p><br /></p>
+
+  <h3 id="18-sw-개발-보안-적용-사례">1.8. SW 개발 보안 적용 사례</h3>
+  <ul>
+    <li>SW 개발 보안 방법론    <strong><em>( Tip. MS 7 CLA )</em></strong>
+      <ul>
+        <li><span style="color:red">MS</span>-SDL
+          <ul>
+            <li>마이크로 소프트는 안전한 소프트웨어를 개발하기 위해 자체 수립한 SDL(Secure Development Lifecycle) 방법론을 적용.</li>
+            <li>적용 이후 이전 버전보다 50% 이상 취약점 감소.</li>
+          </ul>
+        </li>
+        <li><span style="color:red">Seven</span> Touchpoints
+          <ul>
+            <li>소프트웨어 보안의 모범사례를 소프트웨어 개발 라이프사이클에 통합.</li>
+            <li>객관적인 위험 분석 및 테스트를 거쳐 안전한 소프트웨어를 만드는 방법을 정의.</li>
+            <li>수행되는 소프트웨어 위험 요소에 대해 추적하고 모니터링.</li>
+          </ul>
+        </li>
+        <li><span style="color:red">CLA</span>SP
+          <ul>
+            <li>Comprehensive, Lightweight Application Security Process 의 약자.</li>
+            <li>SDLC 초기 단계에 보안 강화를 목적으로 하는 정형화된 프로세스.</li>
+            <li>이미 운영중인 시스템에 적용하기가 용이.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>SW 개발 보안 절차도 (MS-SDL)
+      <ol>
+        <li>송신시스템 : 소프트웨어 개발 보안 교육.</li>
+        <li>계획/분석 : 소프트웨어의 질과 버그 경계 정의 / 보안과 프라이버시 위험 분석.</li>
+        <li>설계 : 공격 영역 분석 / 위협 모델링.</li>
+        <li>구현 : 도구명세 / 금지된함수 사용제한 / 정적 분석.</li>
+        <li>시험/검증 : 동적∙퍼징 테스팅 / 공격영역∙위협 모델 검증.</li>
+        <li>배포/운영 : 사고대응계획 / 최종 보안 검토 / 기록 보관.</li>
+        <li>대응 : 사고 대응 수행.</li>
+      </ol>
+    </li>
+  </ul>
+
+  <p><br />
+<br /></p>
+
+</blockquote>
+
+<p><br /></p>
+
+<p><br /></p>
+
+<hr />
+<ul>
+  <li>정보처리기사 필기 합격 후 실기대비 정리 및 책없이 간단히 보기위해 작성하였습니다.</li>
+  <li>2020년 수제비 정보처리기사 책 기반으로 정리 하였습니다.</li>
+  <li>저작권 관련 문제가 있다면 hojunbbaek@gmail.com 으로 메일 주시면 바로 삭제 조치 하도록 하겠습니다.</li>
+</ul>
+
+<hr />
+</div>
+
+
+  <hr>
+  <div class="article__info clearfix">[정보처리기사 실기] Ⅸ. 소프트웨어 개발 보안 구축 - 소프트웨어 개발 보안 설계. (feat.수제비)</div>
+  <div class="article__info clearfix">
+    <ul class="left-col menu">
+      
+      
+      <li>정보처리기사,</li>
+      
+      <li>NCS,</li>
+      
+      <li>기사실기,</li>
+      
+      <li>소프트웨어 보안,</li>
+      
+      <li>보안설계,</li>
+      
+      
+    </ul>
+  </div>
+  <hr><script src="https://utteranc.es/client.js"
+          repo="baekhj/baekhj.github.blog.comment"
+          issue-term="pathname"
+          label="comments"
+          theme="github-dark"
+          crossorigin="anonymous"
+          async>
+  </script><div class="d-print-none"><footer class="article__footer"><span>마지막 수정
+      <time itemprop="dateModified" datetime="2022-03-31T13:00:00+09:00">2022년 03월 31일</time>
+    </span><!-- start custom article footer snippet -->
+
+<!-- footer.html -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-3538678447289819"
+     data-ad-slot="6328837808"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<!-- end custom article footer snippet -->
+</footer>
+<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/gisa/2022/03/30/EngineerInformationProcessing-8-Tip">[정보처리기사 실기] Ⅷ. 기사실기 요약 / 정리 / 단답 / Tip / 알고가기!</a></div><div class="next"><span>다음</span><a href="/gisa/2022/03/31/EngineerInformationProcessing-25">[정보처리기사 실기] Ⅸ. 소프트웨어 개발 보안 구축 - 소프트웨어 개발 보안 구현</a></div></div></div>
+
+</div>
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
+
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
+</script>
+</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+
+<!-- end custom main bottom snippet -->
+</div>
+            </div></div></div><div class="page__footer d-print-none">
+<footer class="footer py-4 js-page-footer">
+  <div class="main"><div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="baekhj"><meta itemprop="url" content="https://baekhj.github.io/"><meta itemprop="description" content="I am an amazing person."><div class="footer__author-links"><div class="author-links">
+  <ul class="menu menu--nowrap menu--inline"><link itemprop="url" href="https://baekhj.github.io/"><li title="이메일 보내기">
+      <a class="button button--circle mail-button" itemprop="email" href="mailto:hojunbbaek@gmail.com" target="_blank">
+        <i class="fas fa-envelope"></i>
+      </a><li title="Github에서 팔로우하기">
+        <a class="button button--circle github-button" itemprop="sameAs" href="https://github.com/baekhj" target="_blank">
+          <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path class="svgpath" data-index="path_0" fill="#272636" d="M0 525.2c0 223.6 143.3 413.7 343 483.5 26.9 6.8 22.8-12.4 22.8-25.4l0-88.7c-155.3 18.2-161.5-84.6-172-101.7-21.1-36-70.8-45.2-56-62.3 35.4-18.2 71.4 4.6 113.1 66.3 30.2 44.7 89.1 37.2 119 29.7 6.5-26.9 20.5-50.9 39.7-69.6C248.8 728.2 181.7 630 181.7 513.2c0-56.6 18.7-108.7 55.3-150.7-23.3-69.3 2.2-128.5 5.6-137.3 66.5-6 135.5 47.6 140.9 51.8 37.8-10.2 80.9-15.6 129.1-15.6 48.5 0 91.8 5.6 129.8 15.9 12.9-9.8 77-55.8 138.8-50.2 3.3 8.8 28.2 66.7 6.3 135 37.1 42.1 56 94.6 56 151.4 0 117-67.5 215.3-228.8 243.7 26.9 26.6 43.6 63.4 43.6 104.2l0 128.8c0.9 10.3 0 20.5 17.2 20.5C878.1 942.4 1024 750.9 1024 525.3c0-282.9-229.3-512-512-512C229.1 13.2 0 242.3 0 525.2L0 525.2z" />
+</svg>
+</div>
+        </a>
+      </li></ul>
+</div>
+</div>
+    </div><div class="site-info mt-2">
+      <div>© 백뚱's Develop 2021,
+      </div>
+    </div>
+  </div>
+</footer>
+</div></div>
+    </div><script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $body = $('body'), $window = $(window);
+    var $pageRoot = $('.js-page-root'), $pageMain = $('.js-page-main');
+    var activeCount = 0;
+    function modal(options) {
+      var $root = this, visible, onChange, hideWhenWindowScroll = false;
+      var scrollTop;
+      function setOptions(options) {
+        var _options = options || {};
+        visible = _options.initialVisible === undefined ? false : show;
+        onChange = _options.onChange;
+        hideWhenWindowScroll = _options.hideWhenWindowScroll;
+      }
+      function init() {
+        setState(visible);
+      }
+      function setState(isShow) {
+        if (isShow === visible) {
+          return;
+        }
+        visible = isShow;
+        if (visible) {
+          activeCount++;
+          scrollTop = $(window).scrollTop() || $pageMain.scrollTop();
+          $root.addClass('modal--show');
+          $pageMain.scrollTop(scrollTop);
+          activeCount === 1 && ($pageRoot.addClass('show-modal'), $body.addClass('of-hidden'));
+          hideWhenWindowScroll && window.hasEvent('touchstart') && $window.on('scroll', hide);
+          $window.on('keyup', handleKeyup);
+        } else {
+          activeCount > 0 && activeCount--;
+          $root.removeClass('modal--show');
+          $window.scrollTop(scrollTop);
+          activeCount === 0 && ($pageRoot.removeClass('show-modal'), $body.removeClass('of-hidden'));
+          hideWhenWindowScroll && window.hasEvent('touchstart') && $window.off('scroll', hide);
+          $window.off('keyup', handleKeyup);
+        }
+        onChange && onChange(visible);
+      }
+      function show() {
+        setState(true);
+      }
+      function hide() {
+        setState(false);
+      }
+      function handleKeyup(e) {
+        // Char Code: 27  ESC
+        if (e.which ===  27) {
+          hide();
+        }
+      }
+      setOptions(options);
+      init();
+      return {
+        show: show,
+        hide: hide,
+        $el: $root
+      };
+    }
+    $.fn.modal = modal;
+  });
+})();
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+(function () {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    // search panel
+    var search = (window.search || (window.search = {}));
+    var useDefaultSearchBox = window.useDefaultSearchBox === undefined ?
+      true : window.useDefaultSearchBox ;
+
+    var $searchModal = $('.js-page-search-modal');
+    var $searchToggle = $('.js-search-toggle');
+    var searchModal = $searchModal.modal({ onChange: handleModalChange, hideWhenWindowScroll: true });
+    var modalVisible = false;
+    search.searchModal = searchModal;
+
+    var $searchBox = null;
+    var $searchInput = null;
+    var $searchClear = null;
+
+    function getModalVisible() {
+      return modalVisible;
+    }
+    search.getModalVisible = getModalVisible;
+
+    function handleModalChange(visible) {
+      modalVisible = visible;
+      if (visible) {
+        search.onShow && search.onShow();
+        useDefaultSearchBox && $searchInput[0] && $searchInput[0].focus();
+      } else {
+        search.onShow && search.onHide();
+        useDefaultSearchBox && $searchInput[0] && $searchInput[0].blur();
+        setTimeout(function() {
+          useDefaultSearchBox && ($searchInput.val(''), $searchBox.removeClass('not-empty'));
+          search.clear && search.clear();
+          window.pageAsideAffix && window.pageAsideAffix.refresh();
+        }, 400);
+      }
+    }
+
+    $searchToggle.on('click', function() {
+      modalVisible ? searchModal.hide() : searchModal.show();
+    });
+    // Char Code: 83  S, 191 /
+    $(window).on('keyup', function(e) {
+      if (!modalVisible && !window.isFormElement(e.target || e.srcElement) && (e.which === 83 || e.which === 191)) {
+        modalVisible || searchModal.show();
+      }
+    });
+
+    if (useDefaultSearchBox) {
+      $searchBox = $('.js-search-box');
+      $searchInput = $searchBox.children('input');
+      $searchClear = $searchBox.children('.js-icon-clear');
+      search.getSearchInput = function() {
+        return $searchInput.get(0);
+      };
+      search.getVal = function() {
+        return $searchInput.val();
+      };
+      search.setVal = function(val) {
+        $searchInput.val(val);
+      };
+
+      $searchInput.on('focus', function() {
+        $(this).addClass('focus');
+      });
+      $searchInput.on('blur', function() {
+        $(this).removeClass('focus');
+      });
+      $searchInput.on('input', window.throttle(function() {
+        var val = $(this).val();
+        if (val === '' || typeof val !== 'string') {
+          search.clear && search.clear();
+        } else {
+          $searchBox.addClass('not-empty');
+          search.onInputNotEmpty && search.onInputNotEmpty(val);
+        }
+      }, 400));
+      $searchClear.on('click', function() {
+        $searchInput.val(''); $searchBox.removeClass('not-empty');
+        search.clear && search.clear();
+      });
+    }
+  });
+})();
+</script><div class="search search--dark">
+  <div class="main">
+    <div class="search__header">검색</div>
+    <div class="search-bar">
+      <div class="search-box js-search-box">
+        <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
+        <input type="text" />
+        <div class="search-box__icon-clear js-icon-clear">
+          <a><i class="fas fa-times"></i></a>
+        </div>
+      </div>
+      <button class="button button--theme-dark button--pill search__cancel js-search-toggle">
+        취소</button>
+    </div>
+    <div class="search-result js-search-result"></div>
+  </div>
+</div>
+<script>var SOURCES = window.TEXT_VARIABLES.sources;
+var PAHTS = window.TEXT_VARIABLES.paths;
+window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
+  var search = (window.search || (window.search = {}));
+  var searchData = window.TEXT_SEARCH_DATA || {};
+
+  function memorize(f) {
+    var cache = {};
+    return function () {
+      var key = Array.prototype.join.call(arguments, ',');
+      if (key in cache) return cache[key];
+      else return cache[key] = f.apply(this, arguments);
+    };
+  }
+
+  /// search
+  function searchByQuery(query) {
+    var i, j, key, keys, cur, _title, result = {};
+    keys = Object.keys(searchData);
+    for (i = 0; i < keys.length; i++) {
+      key = keys[i];
+      for (j = 0; j < searchData[key].length; j++) {
+        cur = searchData[key][j], _title = cur.title;
+        if ((result[key] === undefined || result[key] && result[key].length < 20 )
+          && _title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
+          if (result[key] === undefined) {
+            result[key] = [];
+          }
+          result[key].push(cur);
+        }
+      }
+    }
+    return result;
+  }
+
+  var renderHeader = memorize(function(header) {
+    return $('<p class="search-result__header">' + header + '</p>');
+  });
+
+  var renderItem = function(index, title, url) {
+    return $('<li class="search-result__item" data-index="' + index + '"><a class="button" href="' + url + '">' + title + '</a></li>');
+  };
+
+  function render(data) {
+    if (!data) { return null; }
+    var $root = $('<ul></ul>'), i, j, key, keys, cur, itemIndex = 0;
+    keys = Object.keys(data);
+    for (i = 0; i < keys.length; i++) {
+      key = keys[i];
+      $root.append(renderHeader(key));
+      for (j = 0; j < data[key].length; j++) {
+        cur = data[key][j];
+        $root.append(renderItem(itemIndex++, cur.title, cur.url));
+      }
+    }
+    return $root;
+  }
+
+  // search box
+  var $result = $('.js-search-result'), $resultItems;
+  var lastActiveIndex, activeIndex;
+
+  function clear() {
+    $result.html(null);
+    $resultItems = $('.search-result__item'); activeIndex = 0;
+  }
+  function onInputNotEmpty(val) {
+    $result.html(render(searchByQuery(val)));
+    $resultItems = $('.search-result__item'); activeIndex = 0;
+    $resultItems.eq(0).addClass('active');
+  }
+
+  search.clear = clear;
+  search.onInputNotEmpty = onInputNotEmpty;
+
+  function updateResultItems() {
+    lastActiveIndex >= 0 && $resultItems.eq(lastActiveIndex).removeClass('active');
+    activeIndex >= 0 && $resultItems.eq(activeIndex).addClass('active');
+  }
+
+  function moveActiveIndex(direction) {
+    var itemsCount = $resultItems ? $resultItems.length : 0;
+    if (itemsCount > 1) {
+      lastActiveIndex = activeIndex;
+      if (direction === 'up') {
+        activeIndex = (activeIndex - 1 + itemsCount) % itemsCount;
+      } else if (direction === 'down') {
+        activeIndex = (activeIndex + 1 + itemsCount) % itemsCount;
+      }
+      updateResultItems();
+    }
+  }
+
+  // Char Code: 13  Enter, 37  ⬅, 38  ⬆, 39  ➡, 40  ⬇
+  $(window).on('keyup', function(e) {
+    var modalVisible = search.getModalVisible && search.getModalVisible();
+    if (modalVisible) {
+      if (e.which === 38) {
+        modalVisible && moveActiveIndex('up');
+      } else if (e.which === 40) {
+        modalVisible && moveActiveIndex('down');
+      } else if (e.which === 13) {
+        modalVisible && $resultItems && activeIndex >= 0 && $resultItems.eq(activeIndex).children('a')[0].click();
+      }
+    }
+  });
+
+  $result.on('mouseover', '.search-result__item > a', function() {
+    var itemIndex = $(this).parent().data('index');
+    itemIndex >= 0 && (lastActiveIndex = activeIndex, activeIndex = itemIndex, updateResultItems());
+  });
+});
+</script>
+</div></div>
+
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function scrollToAnchor(anchor, duration, callback) {
+      var $root = this;
+      $root.animate({ scrollTop: $(anchor).position().top }, duration, function() {
+        window.history.replaceState(null, '', window.location.href.split('#')[0] + anchor);
+        callback && callback();
+      });
+    }
+    $.fn.scrollToAnchor = scrollToAnchor;
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function affix(options) {
+      var $root = this, $window = $(window), $scrollTarget, $scroll,
+        offsetBottom = 0, scrollTarget = window, scroll = window.document, disabled = false, isOverallScroller = true,
+        rootTop, rootLeft, rootHeight, scrollBottom, rootBottomTop,
+        hasInit = false, curState;
+
+      function setOptions(options) {
+        var _options = options || {};
+        _options.offsetBottom && (offsetBottom = _options.offsetBottom);
+        _options.scrollTarget && (scrollTarget = _options.scrollTarget);
+        _options.scroll && (scroll = _options.scroll);
+        _options.disabled !== undefined && (disabled = _options.disabled);
+        $scrollTarget = $(scrollTarget);
+        isOverallScroller = window.isOverallScroller($scrollTarget[0]);
+        $scroll = $(scroll);
+      }
+      function preCalc() {
+        top();
+        rootHeight = $root.outerHeight();
+        rootTop = $root.offset().top + (isOverallScroller ? 0 :  $scrollTarget.scrollTop());
+        rootLeft = $root.offset().left;
+      }
+      function calc(needPreCalc) {
+        needPreCalc && preCalc();
+        scrollBottom = $scroll.outerHeight() - offsetBottom - rootHeight;
+        rootBottomTop = scrollBottom - rootTop;
+      }
+      function top() {
+        if (curState !== 'top') {
+          $root.removeClass('fixed').css({
+            left: 0,
+            top: 0
+          });
+          curState = 'top';
+        }
+      }
+      function fixed() {
+        if (curState !== 'fixed') {
+          $root.addClass('fixed').css({
+            left: rootLeft + 'px',
+            top: 0
+          });
+          curState = 'fixed';
+        }
+      }
+      function bottom() {
+        if (curState !== 'bottom') {
+          $root.removeClass('fixed').css({
+            left: 0,
+            top: rootBottomTop + 'px'
+          });
+          curState = 'bottom';
+        }
+      }
+      function setState() {
+        var scrollTop = $scrollTarget.scrollTop();
+        if (scrollTop >= rootTop && scrollTop <= scrollBottom) {
+          fixed();
+        } else if (scrollTop < rootTop) {
+          top();
+        } else {
+          bottom();
+        }
+      }
+      function init() {
+        if(!hasInit) {
+          var interval, timeout;
+          calc(true); setState();
+          // run calc every 100 millisecond
+          interval = setInterval(function() {
+            calc();
+          }, 100);
+          timeout = setTimeout(function() {
+            clearInterval(interval);
+          }, 45000);
+          window.pageLoad.then(function() {
+            setTimeout(function() {
+              clearInterval(interval);
+              clearTimeout(timeout);
+            }, 3000);
+          });
+          $scrollTarget.on('scroll', function() {
+            disabled || setState();
+          });
+          $window.on('resize', function() {
+            disabled || (calc(true), setState());
+          });
+          hasInit = true;
+        }
+      }
+
+      setOptions(options);
+      if (!disabled) {
+        init();
+      }
+      $window.on('resize', window.throttle(function() {
+        init();
+      }, 200));
+      return {
+        setOptions: setOptions,
+        refresh: function() {
+          calc(true, { animation: false }); setState();
+        }
+      };
+    }
+    $.fn.affix = affix;
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function toc(options) {
+      var $root = this, $window = $(window), $scrollTarget, $scroller, $tocUl = $('<ul class="toc toc--ellipsis"></ul>'), $tocLi, $headings, $activeLast, $activeCur,
+        selectors = 'h1,h2,h3', container = 'body', scrollTarget = window, scroller = 'html, body', disabled = false,
+        headingsPos, scrolling = false, hasRendered = false, hasInit = false;
+
+      function setOptions(options) {
+        var _options = options || {};
+        _options.selectors && (selectors = _options.selectors);
+        _options.container && (container = _options.container);
+        _options.scrollTarget && (scrollTarget = _options.scrollTarget);
+        _options.scroller && (scroller = _options.scroller);
+        _options.disabled !== undefined && (disabled = _options.disabled);
+        $headings = $(container).find(selectors).filter('[id]');
+        $scrollTarget = $(scrollTarget);
+        $scroller = $(scroller);
+      }
+      function calc() {
+        headingsPos = [];
+        $headings.each(function() {
+          headingsPos.push(Math.floor($(this).position().top));
+        });
+      }
+      function setState(element, disabled) {
+        var scrollTop = $scrollTarget.scrollTop(), i;
+        if (disabled || !headingsPos || headingsPos.length < 1) { return; }
+        if (element) {
+          $activeCur = element;
+        } else {
+          for (i = 0; i < headingsPos.length; i++) {
+            if (scrollTop >= headingsPos[i]) {
+              $activeCur = $tocLi.eq(i);
+            } else {
+              $activeCur || ($activeCur = $tocLi.eq(i));
+              break;
+            }
+          }
+        }
+        $activeLast && $activeLast.removeClass('active');
+        ($activeLast = $activeCur).addClass('active');
+      }
+      function render() {
+        if(!hasRendered) {
+          $root.append($tocUl);
+          $headings.each(function() {
+            var $this = $(this);
+            $tocUl.append($('<li></li>').addClass('toc-' + $this.prop('tagName').toLowerCase())
+              .append($('<a></a>').text($this.text()).attr('href', '#' + $this.prop('id'))));
+          });
+          $tocLi = $tocUl.children('li');
+          $tocUl.on('click', 'a', function(e) {
+            e.preventDefault();
+            var $this = $(this);
+            scrolling = true;
+            setState($this.parent());
+            $scroller.scrollToAnchor($this.attr('href'), 400, function() {
+              scrolling = false;
+            });
+          });
+        }
+        hasRendered = true;
+      }
+      function init() {
+        var interval, timeout;
+        if(!hasInit) {
+          render(); calc(); setState(null, scrolling);
+          // run calc every 100 millisecond
+          interval = setInterval(function() {
+            calc();
+          }, 100);
+          timeout = setTimeout(function() {
+            clearInterval(interval);
+          }, 45000);
+          window.pageLoad.then(function() {
+            setTimeout(function() {
+              clearInterval(interval);
+              clearTimeout(timeout);
+            }, 3000);
+          });
+          $scrollTarget.on('scroll', function() {
+            disabled || setState(null, scrolling);
+          });
+          $window.on('resize', window.throttle(function() {
+            if (!disabled) {
+              render(); calc(); setState(null, scrolling);
+            }
+          }, 100));
+        }
+        hasInit = true;
+      }
+
+      setOptions(options);
+      if (!disabled) {
+        init();
+      }
+      $window.on('resize', window.throttle(function() {
+        init();
+      }, 200));
+      return {
+        setOptions: setOptions
+      };
+    }
+    $.fn.toc = toc;
+  });
+})();
+/*(function () {
+
+})();*/
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
+</script>
+    </div>
+    <script>(function () {
+  var $root = document.getElementsByClassName('root')[0];
+  if (window.hasEvent('touchstart')) {
+    $root.dataset.isTouch = true;
+    document.addEventListener('touchstart', function(){}, false);
+  }
+})();
+</script>
+  </body>
+</html>
+

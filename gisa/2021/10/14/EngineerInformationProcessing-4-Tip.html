@@ -1,0 +1,1678 @@
+<!DOCTYPE html><html lang="ko">
+  <head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[정보처리기사 실기] Ⅳ. 기사실기 요약 / 정리 / 단답 / Tip / 알고가기! - 백뚱's Develop</title>
+
+<meta name="description" content="Ⅳ. 서버프로그램 구현 - 알고가기!!                    개발 도구의 분류  ( Tip. 빌 구 테 형 )        빌드 도구 : 작성한 코드의 빌드 및 배포 수행 / 각 구성요소와 모듈에 대한 의존성 관리 지원.        구현 도구 : 개발 코드작성, 디버...">
+
+<meta content="백뚱's Develop" property="og:site_name" />
+
+<meta content="[정보처리기사 실기] Ⅳ. 기사실기 요약 / 정리 / 단답 / Tip / 알고가기!" property="og:title" />
+<meta content="article" property="og:type" />
+
+
+<meta content="[정보처리기사 실기] Ⅳ. 기사실기 요약 / 정리 / 단답 / Tip / 알고가기!! (feat.수제비)" property="og:description" />
+
+
+<meta content="https://baekhj.github.io/gisa/2021/10/14/EngineerInformationProcessing-4-Tip" property="og:url" />
+
+
+<meta content="https://baekhj.github.io/assets/img/og_default.png" property="og:image" />
+
+
+
+<link rel="canonical" href="https://baekhj.github.io/gisa/2021/10/14/EngineerInformationProcessing-4-Tip"><link rel="alternate" type="application/rss+xml" title="백뚱's Develop" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+
+<meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/browserconfig.xml">
+
+<meta name="theme-color" content="#ffffff">
+<!-- end favicons snippet -->
+
+<!--
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+-->
+<link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css" ><!-- start custom head snippets -->
+
+
+<!--서치콘솔 소유권확인-->
+<meta name="google-site-verification" content="d9QBVis3rhONt95u2nqXjSpb-XLTROnZAPoW4nytOkA" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3538678447289819"  crossorigin="anonymous"></script>
+
+<!-- end custom head snippets -->
+<script>(function() {
+  window.isArray = function(val) {
+    return Object.prototype.toString.call(val) === '[object Array]';
+  };
+  window.isString = function(val) {
+    return typeof val === 'string';
+  };
+
+  window.hasEvent = function(event) {
+    return 'on'.concat(event) in window.document;
+  };
+
+  window.isOverallScroller = function(node) {
+    return node === document.documentElement || node === document.body || node === window;
+  };
+
+  window.isFormElement = function(node) {
+    var tagName = node.tagName;
+    return tagName === 'INPUT' || tagName === 'SELECT' || tagName === 'TEXTAREA';
+  };
+
+  window.pageLoad = (function () {
+    var loaded = false, cbs = [];
+    window.addEventListener('load', function () {
+      var i;
+      loaded = true;
+      if (cbs.length > 0) {
+        for (i = 0; i < cbs.length; i++) {
+          cbs[i]();
+        }
+      }
+    });
+    return {
+      then: function(cb) {
+        cb && (loaded ? cb() : (cbs.push(cb)));
+      }
+    };
+  })();
+})();
+(function() {
+  window.throttle = function(func, wait) {
+    var args, result, thisArg, timeoutId, lastCalled = 0;
+
+    function trailingCall() {
+      lastCalled = new Date;
+      timeoutId = null;
+      result = func.apply(thisArg, args);
+    }
+    return function() {
+      var now = new Date,
+        remaining = wait - (now - lastCalled);
+
+      args = arguments;
+      thisArg = this;
+
+      if (remaining <= 0) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+        lastCalled = now;
+        result = func.apply(thisArg, args);
+      } else if (!timeoutId) {
+        timeoutId = setTimeout(trailingCall, remaining);
+      }
+      return result;
+    };
+  };
+})();
+(function() {
+  var Set = (function() {
+    var add = function(item) {
+      var i, data = this._data;
+      for (i = 0; i < data.length; i++) {
+        if (data[i] === item) {
+          return;
+        }
+      }
+      this.size ++;
+      data.push(item);
+      return data;
+    };
+
+    var Set = function(data) {
+      this.size = 0;
+      this._data = [];
+      var i;
+      if (data.length > 0) {
+        for (i = 0; i < data.length; i++) {
+          add.call(this, data[i]);
+        }
+      }
+    };
+    Set.prototype.add = add;
+    Set.prototype.get = function(index) { return this._data[index]; };
+    Set.prototype.has = function(item) {
+      var i, data = this._data;
+      for (i = 0; i < data.length; i++) {
+        if (this.get(i) === item) {
+          return true;
+        }
+      }
+      return false;
+    };
+    Set.prototype.is = function(map) {
+      if (map._data.length !== this._data.length) { return false; }
+      var i, j, flag, tData = this._data, mData = map._data;
+      for (i = 0; i < tData.length; i++) {
+        for (flag = false, j = 0; j < mData.length; j++) {
+          if (tData[i] === mData[j]) {
+            flag = true;
+            break;
+          }
+        }
+        if (!flag) { return false; }
+      }
+      return true;
+    };
+    Set.prototype.values = function() {
+      return this._data;
+    };
+    return Set;
+  })();
+
+  window.Lazyload = (function(doc) {
+    var queue = {js: [], css: []}, sources = {js: {}, css: {}}, context = this;
+    var createNode = function(name, attrs) {
+      var node = doc.createElement(name), attr;
+      for (attr in attrs) {
+        if (attrs.hasOwnProperty(attr)) {
+          node.setAttribute(attr, attrs[attr]);
+        }
+      }
+      return node;
+    };
+    var end = function(type, url) {
+      var s, q, qi, cbs, i, j, cur, val, flag;
+      if (type === 'js' || type ==='css') {
+        s = sources[type], q = queue[type];
+        s[url] = true;
+        for (i = 0; i < q.length; i++) {
+          cur = q[i];
+          if (cur.urls.has(url)) {
+            qi = cur, val = qi.urls.values();
+            qi && (cbs = qi.callbacks);
+            for (flag = true, j = 0; j < val.length; j++) {
+              cur = val[j];
+              if (!s[cur]) {
+                flag = false;
+              }
+            }
+            if (flag && cbs && cbs.length > 0) {
+              for (j = 0; j < cbs.length; j++) {
+                cbs[j].call(context);
+              }
+              qi.load = true;
+            }
+          }
+        }
+      }
+    };
+    var load = function(type, urls, callback) {
+      var s, q, qi, node, i, cur,
+        _urls = typeof urls === 'string' ? new Set([urls]) : new Set(urls), val, url;
+      if (type === 'js' || type ==='css') {
+        s = sources[type], q = queue[type];
+        for (i = 0; i < q.length; i++) {
+          cur = q[i];
+          if (_urls.is(cur.urls)) {
+            qi = cur;
+            break;
+          }
+        }
+        val = _urls.values();
+        if (qi) {
+          callback && (qi.load || qi.callbacks.push(callback));
+          callback && (qi.load && callback());
+        } else {
+          q.push({
+            urls: _urls,
+            callbacks: callback ? [callback] : [],
+            load: false
+          });
+          for (i = 0; i < val.length; i++) {
+            node = null, url = val[i];
+            if (s[url] === undefined) {
+              (type === 'js' ) && (node = createNode('script', { src: url }));
+              (type === 'css') && (node = createNode('link', { rel: 'stylesheet', href: url }));
+              if (node) {
+                node.onload = (function(type, url) {
+                  return function() {
+                    end(type, url);
+                  };
+                })(type, url);
+                (doc.head || doc.body).appendChild(node);
+                s[url] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+    return {
+      js: function(url, callback) {
+        load('js', url, callback);
+      },
+      css: function(url, callback) {
+        load('css', url, callback);
+      }
+    };
+  })(this.document);
+})();
+</script><script>
+  (function() {
+    var TEXT_VARIABLES = {
+      version: '2.2.6',
+      sources: {
+        font_awesome: 'https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css',
+        jquery: 'https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js',
+        leancloud_js_sdk: '//cdn.jsdelivr.net/npm/leancloud-storage@3.13.2/dist/av-min.js',
+        chart: 'https://cdn.bootcss.com/Chart.js/2.7.2/Chart.bundle.min.js',
+        gitalk: {
+          js: 'https://cdn.bootcss.com/gitalk/1.2.2/gitalk.min.js',
+          css: 'https://cdn.bootcss.com/gitalk/1.2.2/gitalk.min.css'
+        },
+        valine: 'https://unpkg.com/valine/dist/Valine.min.js',
+        mathjax: 'https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML',
+        mermaid: 'https://cdn.bootcss.com/mermaid/8.0.0-rc.8/mermaid.min.js'
+      },
+      site: {
+        toc: {
+          selectors: 'h1,h2,h3'
+        }
+      },
+      paths: {
+        search_js: '/assets/search.js'
+      }
+    };
+    window.TEXT_VARIABLES = TEXT_VARIABLES;
+  })();
+</script>
+</head>
+  <body>
+    <div class="root" data-is-touch="false">
+      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
+
+      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
+      <div class="header__title">
+        <div class="header__brand"><?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+ "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="347.000000pt" height="336.000000pt" viewBox="0 0 347.000000 336.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,336.000000) scale(0.100000,-0.100000)"
+fill="#000000" stroke="none">
+<path d="M1556 3350 c-226 -26 -408 -80 -611 -181 -77 -38 -183 -100 -235
+-137 -123 -87 -318 -282 -403 -402 -77 -109 -184 -318 -222 -435 -110 -336
+-110 -694 0 -1030 38 -117 145 -326 222 -435 85 -120 280 -315 403 -402 196
+-140 474 -255 718 -300 166 -30 448 -30 614 0 244 45 522 160 718 300 123 87
+318 282 403 402 77 109 184 318 222 435 68 210 95 436 77 644 -20 229 -66 391
+-168 596 -86 174 -174 296 -319 440 -149 148 -268 234 -450 324 -164 81 -320
+134 -483 162 -134 23 -370 32 -486 19z m374 -61 c517 -64 955 -334 1232 -760
+98 -151 190 -384 225 -569 24 -132 24 -428 0 -560 -145 -774 -843 -1340 -1652
+-1340 -580 0 -1113 288 -1427 771 -98 151 -190 384 -225 569 -24 132 -24 428
+0 560 131 700 713 1235 1447 1329 95 12 303 13 400 0z"/>
+<path d="M750 2160 l0 -300 126 0 c69 0 145 5 170 11 152 39 180 245 40 293
+l-39 13 32 19 c46 27 71 72 71 129 0 40 -5 52 -33 80 -45 45 -89 55 -239 55
+l-128 0 0 -300z m254 189 c32 -25 35 -75 7 -110 -14 -18 -31 -23 -80 -27 l-61
+-4 0 81 0 81 54 0 c39 0 60 -6 80 -21z m33 -264 c19 -22 23 -35 19 -59 -11
+-53 -37 -70 -116 -74 l-70 -4 0 87 0 87 71 -4 c64 -3 74 -7 96 -33z"/>
+<path d="M1429 2433 c-38 -98 -209 -563 -209 -568 0 -3 28 -5 62 -3 l62 3 21
+70 21 70 116 3 116 3 23 -76 22 -75 64 0 c57 0 64 2 58 18 -3 9 -52 143 -108
+297 l-103 280 -67 3 c-65 3 -67 2 -78 -25z m125 -242 c14 -41 26 -78 26 -83 0
+-4 -36 -8 -81 -8 -61 0 -80 3 -76 13 2 6 22 65 43 129 l38 117 13 -47 c6 -26
+23 -80 37 -121z"/>
+<path d="M1870 2160 l0 -300 170 0 170 0 0 50 0 50 -115 0 -115 0 0 75 0 75
+100 0 100 0 0 50 0 50 -100 0 -100 0 0 75 0 75 110 0 110 0 0 50 0 50 -165 0
+-165 0 0 -300z"/>
+<path d="M2320 2160 l0 -300 55 0 55 0 0 140 c0 77 3 140 8 139 4 0 51 -63
+105 -140 l98 -139 75 0 75 0 -120 157 -119 156 76 99 c42 55 92 119 110 144
+l34 44 -69 0 -69 0 -95 -134 c-52 -74 -97 -135 -101 -135 -5 -1 -8 60 -8 134
+l0 135 -55 0 -55 0 0 -300z"/>
+<path d="M1300 1160 l0 -300 60 0 60 0 0 125 0 125 135 0 135 0 0 -125 0 -125
+55 0 55 0 0 300 0 300 -55 0 -55 0 0 -125 0 -125 -135 0 -135 0 0 125 0 125
+-60 0 -60 0 0 -300z"/>
+<path d="M2050 1258 c0 -216 -8 -268 -43 -293 -25 -17 -70 -20 -98 -5 -18 10
+-19 7 -19 -44 0 -51 2 -56 26 -62 40 -10 122 3 159 26 20 12 44 41 59 72 26
+51 26 55 26 280 l0 228 -55 0 -55 0 0 -202z"/>
+</g>
+</svg>
+<a title="JAVA, Spring, 웹개발, 알고리즘 풀이, Dart, Flutter, 데이터베이스.
+" href="/">백뚱's Develop</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
+        <ul><li class="navigation__item"><a href="/archive.html">카테고리</a></li><li class="navigation__item"><a href="/about.html">소개</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+      </nav></div>
+  </header>
+</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
+
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+
+<div class="toc-aside">
+    <!-- side_addsense3.html -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3538678447289819"
+         data-ad-slot="4004543909"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
+</aside></div>
+
+              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
+
+<!-- end custom main top snippet -->
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[정보처리기사 실기] Ⅳ. 기사실기 요약 / 정리 / 단답 / Tip / 알고가기!</h1></header></div><meta itemprop="headline" content="[정보처리기사 실기] Ⅳ. 기사실기 요약 / 정리 / 단답 / Tip / 알고가기!"><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%A0%95%EB%B3%B4%EC%B2%98%EB%A6%AC%EA%B8%B0%EC%82%AC+%EC%8B%A4%EA%B8%B0">정보처리기사 실기</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%A0%95%EB%B3%B4%EC%B2%98%EB%A6%AC%EA%B8%B0%EC%82%AC+%EC%8B%A4%EA%B8%B0+Tip">정보처리기사 실기 Tip</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>baekhj</span></li><li><i class="far fa-calendar-alt"></i> <span>2021년 10월 14일</span>
+            </li></ul></div><meta itemprop="author" content="baekhj"/><meta itemprop="datePublished" content="2021-10-14T08:50:00+09:00">
+    <meta itemprop="keywords" content="정보처리기사 실기,정보처리기사 실기 Tip"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+
+<div style="width: 100%;">
+    <!-- post_top_addsense.html -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3538678447289819"
+         data-ad-slot="7562028429"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody"><h1 id="ⅳ-서버프로그램-구현---알고가기">Ⅳ. 서버프로그램 구현 - 알고가기!!</h1>
+
+<p><br /></p>
+
+<blockquote>
+
+  <ul>
+    <li>
+      <dl>
+        <dt>개발 도구의 분류  <strong><em>( Tip. 빌 구 테 형 )</em></strong></dt>
+        <dd><strong><span style="color:red">빌</span>드 도구</strong> : 작성한 코드의 빌드 및 배포 수행 / 각 구성요소와 모듈에 대한 의존성 관리 지원.</dd>
+        <dd><strong><span style="color:red">구</span>현 도구</strong> : 개발 코드작성, 디버깅, 수정 등 작업 지원 도구.</dd>
+        <dd><strong><span style="color:red">테</span>스트 도구</strong> : 코드의 기능 검증, 전체 품질을 높이기 위한 도구.</dd>
+        <dd><strong><span style="color:red">형</span>상관리 도구</strong> : 코드와 리소스 등 산출물에 대한 버전관리 도구.
+<br /></dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>델파이 기법</dt>
+        <dd>전문가의 경험적 지식을 통한 문제해결을 위한 기법.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>브레인 스토밍</dt>
+        <dd>소속된 인원들이 자발적으로 자연스럽게 제시된 아이디어 목록을 통해서 연계 요구사항 도출하는 기법.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>체크리스트</dt>
+        <dd>시스템 운영환경, 성능, 보안, 데이터 발생 주기 등 <strong>점검을 통해 요구사항을 도출</strong>하는 기법.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>개체정의서</dt>
+        <dd>데이터베이스 개념모델링 단계에서 도출한 개체의 타입과 관련 속성, 식별자 등의 정보를 개괄적으로 명세화한 정의서.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>WAS [Web Application Server]</dt>
+        <dd>사용자 요청 스레드를 처리하고, 데이터 베이스에 접속하여 SQL 쿼리문에 대한 결과 값을 반환하는 역할을 수행하는 서버.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>테이블 정의서</dt>
+        <dd>논리 및 물리 모델링 과정에서 작성하는 설계 산출물로 테이블을 구성하는 칼럼들의 특성, 인덱스(Index), 업무 규칙을 문서화한 것.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>연계시스템</dt>
+        <dd>송신 시스템과 수신 시스템으로 구성할 수 있으며 연계 방식에 따라 중계 서버를 둘 수 있다</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>인터페이스 정의서</dt>
+        <dd>송신시스템과 수신 시스템 간의 인터페이스 방식, 주기 등을 기록한 현황을 작성.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>연계 데이터 표준화</dt>
+        <dd>인터페이스 시스템 사이에서 교환되는 데이터는 규격화된 표준 형식을 정의하여 사용하는 규칙.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>인터페이스 데이터 표준  <strong><em>( Tip. 공 개 종 )</em></strong></dt>
+        <dd>인터페이스 데이터 <span style="color:red">공</span>개부 / 인터페이스 데이터 <span style="color:red">개</span>별부 /  인터페이스 데이터 <span style="color:red">종</span>료부</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>JVM [Java Virtual Machine]</dt>
+        <dd>시스템 메모리를 관리하면서 자바 기반 애플리케이션을 위해 이식 가능한 실행 환경을 제공하는 소프트웨어.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>컨테이너 [Container]</dt>
+        <dd>JSP와 서블릿을 실행시킬 수 있는 소프트웨어.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>연계솔루션(EAI)</dt>
+        <dd>실제 송수신 처리와 진행 현황을 모니터링 및 통제하는 서버</dd>
+      </dl>
+    </li>
+    <li>웹 서비스 방식의 유형
+      <ul>
+        <li>SOAP (Simple Object Access Protocol) : HTTP, HTTPS, SMTP 등을 사용하여 XML 기반의 메시지를 네트워크 상태에서 교환하는 프로토콜.</li>
+        <li>WSDL (Web Service Description Language) : 웹서비스명, 제공위치, 메시지포맷, 프로토콜 정보 등 웹서비스에 대한 상세정보를 기술한 파일로 XML 형식.</li>
+        <li>UDDI (Universal Description, Discovery And Integration) :  웹서비스 정비인 WSDL을 등록/검색하기 위한 저장소.
+<br /></li>
+      </ul>
+    </li>
+    <li>
+      <dl>
+        <dt>소켓통신</dt>
+        <dd>연결을 생성하여 포트를 할당하고, 클라이언트의 요청을 연결하여 통신하는 기법.</dd>
+      </dl>
+    </li>
+    <li>형상관리 절차 <strong><em>( Tip. 식 통 감 기 )</em></strong>
+      <ol>
+        <li>형상 <span style="color:red">식</span>별 : 형상관리 대상 정의 및 식별</li>
+        <li>형상 <span style="color:red">통</span>제 : 변경요구 관리, 변경제어, 형상관리 등 통제</li>
+        <li>형상 <span style="color:red">감</span>사 : 소프트웨어 베이스라인 무결성 평가 / 요구사항 일치 검토</li>
+        <li>형상 <span style="color:red">기</span>록 : 각종 형상 및 변경 수행결과 기록 / 형상결과 보고서 작성 <br />
+<br /></li>
+      </ol>
+    </li>
+    <li>
+      <dl>
+        <dt>브랜치 [Branch]</dt>
+        <dd>여러 개발자들이 동시에 다양한 작업을 할 수 있게 만들어 주는 기능.</dd>
+        <dd>각자 독립적인 작업영역(저장소) 안에서 마음대로 소스 코드를 변경 할 수 있는 기능.</dd>
+      </dl>
+    </li>
+    <li>
+      <p>빌드 도구 : 작성한 코드의 빌드 및 배포 수행 / 각 구성요소와 모듈에 대한 의존성 관리 지원.</p>
+    </li>
+    <li>
+      <p>구현 도구 : 개발 코드작성, 디버깅, 수정 등 작업 지원 도구.</p>
+    </li>
+    <li>
+      <p>테스트 도구 : 코드의 기능 검증, 전체 품질을 높이기 위한 도구.</p>
+    </li>
+    <li>
+      <dl>
+        <dt>형상관리 도구</dt>
+        <dd>코드와 리소스 등 산출물에 대한 버전관리 도구.</dd>
+        <dd>개발자들이 작성한 코드와 리소스등 산출물에 대한 버전관리를 위해 사용되는 도구.</dd>
+        <dd>형상관리도구는 소프트웨어 프로젝트에서 나오는 결과물을 관리하는 소프트웨어이다.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>웹서버</dt>
+        <dd>HTTP를 이용한 요청/응답을 처리</dd>
+        <dd>웹 상의 정적 콘텐츠 처리</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>웹 어플리케이션 서버 [WAS]</dt>
+        <dd>동적 콘텐츠를 처리</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>데이터베이스 서버</dt>
+        <dd>데이터의 수집, 저장을 위한 용도</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>파일서버</dt>
+        <dd>물리 저장장치를 활용한 서버</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>클라이언트 프로그램</dt>
+        <dd>설치를 통해 사용자와 커뮤니케이션하는 프로그램</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>웹 브라우저</dt>
+        <dd>웹 서비스의 형태로 서버에서 웹 애플리케이션을 응답시 브라우저를 통해서 사용자와 커뮤니케이션</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>모바일 앱</dt>
+        <dd>모바일 디바이스에 설치되어 활용되는 애플리케이션</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>모바일 웹</dt>
+        <dd>웹 브라우저와 동일한 형태로 모바일상 웹 브라우저를 통해 서비스 제공</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>운영체제</dt>
+        <dd>서버의 하드웨어를 사용자 관점에서 편리하고 유용하게 사용하기 위한 소프트웨어</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>미들웨어</dt>
+        <dd>웹 서비스는 WEB, WAS 서버를 설치하여 사용자 요구사항에 적합한 서비스 제공</dd>
+        <dd>주로 자바 기반 환경에서 JVM 을 설치하여 컨테이너로의 기능을 주로 이용</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>DBMS</dt>
+        <dd>데이터의 저장 및 활용을 위함</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>공통모듈 [Common Module]</dt>
+        <dd>특정 기능을 처리할 수 있는 실행코드</dd>
+        <dd>자체적으로 컴파일이 가능하고 다른 프로그램에서 재사용이 가능</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>응집도 유형 <strong><em>( Tip. 우 논 시 절 통 순 기 )</em></strong></dt>
+        <dd><strong><span style="color:red">우</span>연적 응집도</strong> : 모듈 내부 각 구성요소 연관 없음.</dd>
+        <dd><strong><span style="color:red">논</span>리적 응집도</strong> : 유사한 성격, 특정 현태로 분류.</dd>
+        <dd><strong><span style="color:red">시</span>간적 응집도</strong> : 특정 시간에 처리 되어야 하는 활동들.</dd>
+        <dd><strong><span style="color:red">절</span>차적 응집도</strong> : 모듈안 구성요소들이 기능을 순차적으로 수행.</dd>
+        <dd><strong><span style="color:red">통</span>신적 응집도</strong> :  동일한 입력 ∙ 출력을 사용하여 다른 기능을 수행하는 활동이 모임.</dd>
+        <dd><strong><span style="color:red">순</span>차적 응집도</strong> : 모듈내 한 활동의 출력값을 다른 활동이 사용.</dd>
+        <dd><strong><span style="color:red">기</span>능적 응집도</strong> - 모듈내 모든 기능이 단일 목적으로 수행.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>웹서비스 방식</dt>
+        <dd>네트워크에 분산된 서비스 정보를 서비스 형태로 개방하여 표준화된 방식으로 공유하는 기술</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>REST</dt>
+        <dd>HTTP URI를 통해 자원을 명시하고, HTTP Method(POST, GET, PUT, DELETE)를 통해 해당 자원에 대한 생성, 조회, 갱신, 삭제 등의 명령을 적용하는 것.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>결합도 유형 <strong><em>( Tip. 내 공 외 제 스 자 )</em></strong></dt>
+        <dd><strong><span style="color:red">내</span>용 결합도</strong> : 다른 모듈의 변수나 기능을 사용.</dd>
+        <dd><strong><span style="color:red">공</span>통 결합도</strong> : 전역변수를 갱신하는 식으로 상호 작용.</dd>
+        <dd><strong><span style="color:red">외</span>부 결합도</strong> : 두개의 모듈이 외부에서 도입된 데이터 포맷, 통신프로토콜, 인터페이스 를 공유.</dd>
+        <dd><strong><span style="color:red">제</span>어 결합도</strong> : 처리할 대상인 값만이 아닌 어떻게 처리할지 제어요소가 전달되는 경우.</dd>
+        <dd><strong><span style="color:red">스</span>탬프 결합도</strong> : 모듈간 인터페이스로, 배열, 객체, 구조 등이 전달.</dd>
+        <dd><strong><span style="color:red">자</span>료 결합도</strong> : 모듈간 인터페이스 파라미터를 통해서만 상호작용.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>DAO [Data Access Object]</dt>
+        <dd>특정 타입의 데이터베이스에 추상 인터페이스를 제공하는 객체</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>DTO [Data Transfer Object]</dt>
+        <dd>프로세스 사이에서 데이터를 전송하는 객체로 데이터 저장•회수 외에 다른 기능이 없는 객체</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>VO [Value Object]</dt>
+        <dd>간단한 엔티티를 의미하는 작은 객체 가변클래스인 DTO와 달리 고정클래스를 가지는 객체</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>서비스 [Service]</dt>
+        <dd>사용자의 요청을 처리하는 기능을 제공하기 위한 로직을 구현하고 DAO 클래스를 통해서 DB연동을 처리하는 기능을 수행</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>화이트 박스 [Whitebox] 기법</dt>
+        <dd>프로그램의 로직을 이해하고, 내부 구조와 동작을 검사하는 소프트웨어 테스트 방식</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>공통모듈 테스트 종류 <strong><em>( Tip. 화 메 화 드 스 )</em></strong></dt>
+        <dd><strong><span style="color:red">화</span>이트박스 테스트</strong> : 응용프로그램 내부 구조와 동작을 검사하는 SW 테스트 방식</dd>
+        <dd><strong><span style="color:red">메</span>서드 기반 테스트</strong> : 외부에 공개된 메서드 가반의 테스트</dd>
+        <dd><strong><span style="color:red">화</span>면 기반 테스트</strong> : 화면에 직접 입력하여 테스트 수행</dd>
+        <dd>테스트 <strong><span style="color:red">드</span>라이버 / 테스트 <span style="color:red">스</span>텁</strong></dd>
+      </dl>
+      <ul>
+        <li>테스트 드라이버 : 하위모듈은 있으나 상위 모듈이 없는경우 수행</li>
+        <li>테스트 스텁 : 상위모듈은 있지만 하위모듈은 없는경우 수행</li>
+      </ul>
+    </li>
+    <li>
+      <dl>
+        <dt>메서드 [Method]</dt>
+        <dd>메서드는 클래스에서 정의된 여러 종류의 변수들을 사용하여 정해진 기능들을 싱행 할 수 있도록 코드를 선언한 것.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>JUnit</dt>
+        <dd>자바 프로그래밍 언어용 단위 테스트 도구</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>어노테이션 [Annotation]</dt>
+        <dd>자바코드에 주석을 달아 특별한 의미를 부여한 메타데이터의 일종</dd>
+        <dd>보통 @ 기호를 앞에 붙여 사용</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>결합도</dt>
+        <dd>모듈 내부가 아닌 외부의 모듈과의 연관도 또는 모듈 간의 상호 의존성</dd>
+        <dd>소프트웨어 구조에서 모듈간의 관련성을 측정하는 척도</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>우연적 응집도</dt>
+        <dd>모듈 내부의 각 구성요소들이 연관이 없을 경우</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>논리적 응집도</dt>
+        <dd>유사한 성격을 갖거나 특정 형태로 분류되는 처리 요소들이 한 모듈에서 처리되는 경우</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>시간적 응집도</dt>
+        <dd>연관된 기능이라기보다는 특정 시간에 처리되어야 하는 활동들을 한 모듈에서 처리 할 경우</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>절차적 응집도</dt>
+        <dd>모듈이 다수의 관련 기능을 가질때 모듈안의 구성요소들이 그 기능을 순차적으로 수행할 경우</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>통신적 응집도</dt>
+        <dd>동일한 입력과 출력을 사용하여 다른 기능을 수행하는 활동들이 모여 있을 경우</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>순차적 응집도</dt>
+        <dd>모듈 내에서 한 활동으로부터 나온 출력값을 다른 활동이 사용할 경우</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>기능적 응집도</dt>
+        <dd>모듈 내부의 모든 기능이 단일한 목적을 위해 수행되는 경우</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>내용 결합도</dt>
+        <dd>다른 모듈 내부에 있는 변수나 기능을 다른 모듈에서 사용하는 경우</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>공통 결합도</dt>
+        <dd>파라미터가 아닌 모듈 밖에 선언되어 있는 전역변수를 참조하고 전역 변수를 갱신하는 식으로 상호작용하는 경우</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>외부 결합도</dt>
+        <dd>두 개의 모듈이 외부에서 도입된 데이터 포맷, 통신 프로토콜, 또는 디바이스 인터페이스를 공유할 경우</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>제어 결합도</dt>
+        <dd>단순 처리할 대상인 값만 전달되는게 아니라 어떻게 처리를 해야 한다는 제어 요소가 전달되는 경우</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>스탬프 결합도</dt>
+        <dd>모듈 간의 인터페이스로 배열이나 객체, 구조 등이 전달되는 경우</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>자료 결합도</dt>
+        <dd>모듈간의 인터페이스로 전달되는 파라미터를 통해서만 모듈 간의 상호작용이 일어나는 경우</dd>
+      </dl>
+    </li>
+    <li>MVC패턴
+      <ul>
+        <li>Model(모델) : 애플리케이션이 무엇을 할 것인지 정의 / 내부 비지니스 로직을 처리 하기 위한 역할</li>
+        <li>Controller(컨트롤러) : 모델이 어떻게 처리할지를 알려주는 역할 / 뷰에 명령을 보내어 화면 요청 결과를 전달</li>
+        <li>View(뷰) : 화면에 무엇인가를 보여주기 위한 역할 <br />
+<br /></li>
+      </ul>
+    </li>
+    <li>
+      <dl>
+        <dt>화이트 박스 테스트 [Whitebox Test]</dt>
+        <dd>응용프로그램 내부구조와 동작을 검사하는 소프트웨어 테스트 방식</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>메서드 기반 테스트</dt>
+        <dd>공통 모듈의 외부에 공개된 메서드 기반의 테스트</dd>
+        <dd>메서드에 서로 다른 파라미터 값을 호출하면서 다양한 테스트를 수행</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>화면 기반 테스트</dt>
+        <dd>사용자용 화면이 있는 경우, 각각의 화면단위로 단위 모듈을 개발 후에 화면에 직접 데이터를 입력하여 테스트 수행</dd>
+        <dd>화면기반테스트는 화면과 연게된 서비스, 비지니스 컴포넌트 및 공통 컴포넌트를 한꺼번에 단위 테스트에 참여</dd>
+        <dd>장점 : 사용자 시나리오에 기반한 공통모듈 테스트가 가능</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>테스트 드라이버[Driver] / 테스트 스텁 [Stub]</dt>
+        <dd>기능을 테스트할 수 있는 화면 또는 하위 모듈이 구현되지 않은 경우 테스트 드라이버, 테스트 스텁을 통해 테스트 수행</dd>
+        <dd>테스트 드라이버 : 하위모듈은 있지만 상위 모듈은 없는 경우 사용</dd>
+        <dd>테스트 스텁 : 상위 모듈은 있지만 하위 모듈이 없는 경우 사용 <br />
+<br /></dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>Fan-In (팬인)</dt>
+        <dd>어떤 모듈을 제어(호출)하는 모듈의 수</dd>
+        <dd>Fan-In이 높으면 재사용 측면에서 설계가 잘되었지만, 단일 장애점 발생 가능</dd>
+        <dd>Fan-In이 높으면 관리 비용 및 테스트 비용 증가</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>Fan-Out (팬아웃)</dt>
+        <dd>어떤 모듈에 의해 제어(호출)되는 모듈의 수</dd>
+        <dd>Fan-Out이 높을 경우 불필요한 모듈 호출 여부 검토 필요</dd>
+        <dd>Fan-Out이 높을 경우는 단순화 여부 검토 필요</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>루틴 [Routine]</dt>
+        <dd>소프트웨어에서 특정 동작을 수행하는 일련의 코드로서 기능을 가진 명령어의 모임</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>백엔드 [Back-End]</dt>
+        <dd>사용자와 만나지 않고 프론트엔드와 연동하여 핵심 로직을 처리하는 영역</dd>
+      </dl>
+    </li>
+    <li>서버프로그램 구현 절차 <strong><em>( Tip. 디 스  다 써 콘 )</em></strong>
+      <ol>
+        <li><strong><span style="color:red">D</span>TO/VO</strong></li>
+        <li><strong><span style="color:red">S</span>QL문</strong></li>
+        <li><strong><span style="color:red">DA</span>O</strong></li>
+        <li><strong><span style="color:red">Se</span>rvice</strong></li>
+        <li><strong><span style="color:red">Con</span>troller</strong> <br />
+<br /></li>
+      </ol>
+    </li>
+    <li>
+      <dl>
+        <dt>API</dt>
+        <dd>송신 시스템의 DB에서 데이터를 읽어서 제공하는 애플리케이션 프로그래밍 인터페이스 프로그램</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>연계테스트</dt>
+        <dd>송신 시스템과 수신시스템을 연계하였을 경우 데이터의 정합성과 데이터 전송 여부에 대한 테스트</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>DAO [Data Access Object]</dt>
+        <dd>특정 타입의 데이터베이스에 추상 인터페이스를 제공하는 객체로 세부 내용 노출 없이 데이터 조작</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>DTO [Data Transfer Object]</dt>
+        <dd>프로세스 사이에서 데이터를 전송하는 객체로 데이터 저장, 회수 외에 다른 기능 없음</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>VO [Value Object]</dt>
+        <dd>간단한 엔티티를 의미하는 작은 객체 가변 클래스인 DTO와 달리 <strong>고정 클래스를 가짐</strong></dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>ORM [Object Relation Mapping]</dt>
+        <dd>객체지향 언어인 자바의 관계형 DB 프로그래밍을 좀 더 쉽게 할 수 있게 도와주는 개발 프레임 워크.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>배치프로그램 유형  <strong><em>( Tip. 이 온 정 )</em></strong></dt>
+        <dd><strong><span style="color:red">이</span>벤트 배치</strong> : 지정된 조건 충족시 실행</dd>
+        <dd><strong><span style="color:red">온</span>디맨드 배치</strong> : 사용자의 명시적 요구 발생시 실행</dd>
+        <dd><strong><span style="color:red">정</span>기 배치</strong> : 정해진 시점에 정기적으로 실행</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>Cron 표현식 - <strong><em>( Tip. 초 분 일 시 월 요 연 )</em></strong></dt>
+        <dd><span style="color:red">초</span>, <span style="color:red">분</span>, <span style="color:red">일</span>, <span style="color:red">시</span>간, <span style="color:red">월</span>, <span style="color:red">요</span>일, <span style="color:red">연</span>도</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>EAI</dt>
+        <dd>기업에서 운영되는 서로 다른 플랫폼 및 애플리케이션들 간의 정보 전달, 연계, 통합을 가능하게 해 주는 솔루션</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>ESB</dt>
+        <dd>기업에서 운영되는 서로 다른 플랫폼 및 애플리케이션들 간을 하나의 시스템으로 관리, 운영 할 수 있도록 서비스 중심의 통합을 지향하는 아키텍처 또는 기술</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>느슨한결합</dt>
+        <dd>특정 서비스를 변경하더라도 연결된 다른 서비스에는 영향을 주지 않는 유연한 구조</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>배치프로그램</dt>
+        <dd>사용자와의 상호작용 없이 일련의 작업들을 작업 단위로 묶어 정기적으로 반복 수행하거나 정해진 규칙에 따라 일괄 처리하는 방법.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>스프링배치 [Spring Batch]</dt>
+        <dd>스프링 프레임워크의 DI, AOP, 서비스 추상화 등 스프링 프레임워크의 3대 요소를 모두 사용할 수 잇는 대용량 처리를 제공하는 스케줄러</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>쿼츠 스케줄러[Quartz Scheduler]</dt>
+        <dd>스프링 프레임워크에 플러그인되어 수행하는 작업과 실행 스케줄을 정의하는 트리거를 분리하여 유연성을 제공하는 오픈소스 기반 스케줄러</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>형상관리 개념</dt>
+        <dd>소프트웨어 개발을 위한 전체 과정에서 발생하는 모든 항목의 변경사항을 관리하기 위한 활동.</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>미들웨어 [Middle Ware]</dt>
+        <dd>컴퓨터와 컴퓨터간의 연결을 쉽고 안전하게 할 수 있또록 해주고 이에 대한 관리를 도와주는 소프트웨어</dd>
+        <dd>자바 기반환경에서 JVM을 설치하여 컨테이너로의 기능을 주로 이용</dd>
+      </dl>
+    </li>
+    <li>
+      <dl>
+        <dt>소프트웨어 형상관리 베이스라인 개념</dt>
+        <dd>개발과정의 각 단계의 산출물을 검토, 평가, 조정, 처리등 변화를 통제하는 시점의 기준</dd>
+      </dl>
+    </li>
+  </ul>
+
+</blockquote>
+
+<hr />
+<ul>
+  <li>정보처리기사 필기 합격 후 실기대비 정리 및 책없이 간단히 보기위해 작성하였습니다.</li>
+  <li>2020년 수제비 정보처리기사 책 기반으로 정리 하였습니다.</li>
+  <li>저작권 관련 문제가 있다면 hojunbbaek@gmail.com 으로 메일 주시면 바로 삭제 조치 하도록 하겠습니다.</li>
+</ul>
+
+<hr />
+</div>
+
+
+  <hr>
+  <div class="article__info clearfix">[정보처리기사 실기] Ⅳ. 기사실기 요약 / 정리 / 단답 / Tip / 알고가기!! (feat.수제비)</div>
+  <div class="article__info clearfix">
+    <ul class="left-col menu">
+      
+      
+      <li>정보처리기사,</li>
+      
+      <li>기사실기,</li>
+      
+      <li>NCS,</li>
+      
+      <li>기사 요약,</li>
+      
+      <li>기사 정리,</li>
+      
+      <li>서버프로그램,</li>
+      
+      
+    </ul>
+  </div>
+  <hr><script src="https://utteranc.es/client.js"
+          repo="baekhj/baekhj.github.blog.comment"
+          issue-term="pathname"
+          label="comments"
+          theme="github-dark"
+          crossorigin="anonymous"
+          async>
+  </script><div class="d-print-none"><footer class="article__footer"><span>마지막 수정
+      <time itemprop="dateModified" datetime="2021-10-14T08:50:00+09:00">2021년 10월 14일</time>
+    </span><!-- start custom article footer snippet -->
+
+<!-- footer.html -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-3538678447289819"
+     data-ad-slot="6328837808"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<!-- end custom article footer snippet -->
+</footer>
+<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/gisa/2021/10/14/EngineerInformationProcessing-13">[정보처리기사 실기] Ⅳ. 서버 프로그램 구현 - 서버프로그램 구현 / 배치프로그램 구현</a></div><div class="next"><span>다음</span><a href="/gisa/2021/10/22/EngineerInformationProcessing-14">[정보처리기사 실기] Ⅴ. 인터페이스 구현 - 인터페이스 설계 확인</a></div></div></div>
+
+</div>
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
+
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
+</script>
+</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+
+<!-- end custom main bottom snippet -->
+</div>
+            </div></div></div><div class="page__footer d-print-none">
+<footer class="footer py-4 js-page-footer">
+  <div class="main"><div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="baekhj"><meta itemprop="url" content="https://baekhj.github.io/"><meta itemprop="description" content="I am an amazing person."><div class="footer__author-links"><div class="author-links">
+  <ul class="menu menu--nowrap menu--inline"><link itemprop="url" href="https://baekhj.github.io/"><li title="이메일 보내기">
+      <a class="button button--circle mail-button" itemprop="email" href="mailto:hojunbbaek@gmail.com" target="_blank">
+        <i class="fas fa-envelope"></i>
+      </a><li title="Github에서 팔로우하기">
+        <a class="button button--circle github-button" itemprop="sameAs" href="https://github.com/baekhj" target="_blank">
+          <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path class="svgpath" data-index="path_0" fill="#272636" d="M0 525.2c0 223.6 143.3 413.7 343 483.5 26.9 6.8 22.8-12.4 22.8-25.4l0-88.7c-155.3 18.2-161.5-84.6-172-101.7-21.1-36-70.8-45.2-56-62.3 35.4-18.2 71.4 4.6 113.1 66.3 30.2 44.7 89.1 37.2 119 29.7 6.5-26.9 20.5-50.9 39.7-69.6C248.8 728.2 181.7 630 181.7 513.2c0-56.6 18.7-108.7 55.3-150.7-23.3-69.3 2.2-128.5 5.6-137.3 66.5-6 135.5 47.6 140.9 51.8 37.8-10.2 80.9-15.6 129.1-15.6 48.5 0 91.8 5.6 129.8 15.9 12.9-9.8 77-55.8 138.8-50.2 3.3 8.8 28.2 66.7 6.3 135 37.1 42.1 56 94.6 56 151.4 0 117-67.5 215.3-228.8 243.7 26.9 26.6 43.6 63.4 43.6 104.2l0 128.8c0.9 10.3 0 20.5 17.2 20.5C878.1 942.4 1024 750.9 1024 525.3c0-282.9-229.3-512-512-512C229.1 13.2 0 242.3 0 525.2L0 525.2z" />
+</svg>
+</div>
+        </a>
+      </li></ul>
+</div>
+</div>
+    </div><div class="site-info mt-2">
+      <div>© 백뚱's Develop 2021,
+      </div>
+    </div>
+  </div>
+</footer>
+</div></div>
+    </div><script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $body = $('body'), $window = $(window);
+    var $pageRoot = $('.js-page-root'), $pageMain = $('.js-page-main');
+    var activeCount = 0;
+    function modal(options) {
+      var $root = this, visible, onChange, hideWhenWindowScroll = false;
+      var scrollTop;
+      function setOptions(options) {
+        var _options = options || {};
+        visible = _options.initialVisible === undefined ? false : show;
+        onChange = _options.onChange;
+        hideWhenWindowScroll = _options.hideWhenWindowScroll;
+      }
+      function init() {
+        setState(visible);
+      }
+      function setState(isShow) {
+        if (isShow === visible) {
+          return;
+        }
+        visible = isShow;
+        if (visible) {
+          activeCount++;
+          scrollTop = $(window).scrollTop() || $pageMain.scrollTop();
+          $root.addClass('modal--show');
+          $pageMain.scrollTop(scrollTop);
+          activeCount === 1 && ($pageRoot.addClass('show-modal'), $body.addClass('of-hidden'));
+          hideWhenWindowScroll && window.hasEvent('touchstart') && $window.on('scroll', hide);
+          $window.on('keyup', handleKeyup);
+        } else {
+          activeCount > 0 && activeCount--;
+          $root.removeClass('modal--show');
+          $window.scrollTop(scrollTop);
+          activeCount === 0 && ($pageRoot.removeClass('show-modal'), $body.removeClass('of-hidden'));
+          hideWhenWindowScroll && window.hasEvent('touchstart') && $window.off('scroll', hide);
+          $window.off('keyup', handleKeyup);
+        }
+        onChange && onChange(visible);
+      }
+      function show() {
+        setState(true);
+      }
+      function hide() {
+        setState(false);
+      }
+      function handleKeyup(e) {
+        // Char Code: 27  ESC
+        if (e.which ===  27) {
+          hide();
+        }
+      }
+      setOptions(options);
+      init();
+      return {
+        show: show,
+        hide: hide,
+        $el: $root
+      };
+    }
+    $.fn.modal = modal;
+  });
+})();
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+(function () {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    // search panel
+    var search = (window.search || (window.search = {}));
+    var useDefaultSearchBox = window.useDefaultSearchBox === undefined ?
+      true : window.useDefaultSearchBox ;
+
+    var $searchModal = $('.js-page-search-modal');
+    var $searchToggle = $('.js-search-toggle');
+    var searchModal = $searchModal.modal({ onChange: handleModalChange, hideWhenWindowScroll: true });
+    var modalVisible = false;
+    search.searchModal = searchModal;
+
+    var $searchBox = null;
+    var $searchInput = null;
+    var $searchClear = null;
+
+    function getModalVisible() {
+      return modalVisible;
+    }
+    search.getModalVisible = getModalVisible;
+
+    function handleModalChange(visible) {
+      modalVisible = visible;
+      if (visible) {
+        search.onShow && search.onShow();
+        useDefaultSearchBox && $searchInput[0] && $searchInput[0].focus();
+      } else {
+        search.onShow && search.onHide();
+        useDefaultSearchBox && $searchInput[0] && $searchInput[0].blur();
+        setTimeout(function() {
+          useDefaultSearchBox && ($searchInput.val(''), $searchBox.removeClass('not-empty'));
+          search.clear && search.clear();
+          window.pageAsideAffix && window.pageAsideAffix.refresh();
+        }, 400);
+      }
+    }
+
+    $searchToggle.on('click', function() {
+      modalVisible ? searchModal.hide() : searchModal.show();
+    });
+    // Char Code: 83  S, 191 /
+    $(window).on('keyup', function(e) {
+      if (!modalVisible && !window.isFormElement(e.target || e.srcElement) && (e.which === 83 || e.which === 191)) {
+        modalVisible || searchModal.show();
+      }
+    });
+
+    if (useDefaultSearchBox) {
+      $searchBox = $('.js-search-box');
+      $searchInput = $searchBox.children('input');
+      $searchClear = $searchBox.children('.js-icon-clear');
+      search.getSearchInput = function() {
+        return $searchInput.get(0);
+      };
+      search.getVal = function() {
+        return $searchInput.val();
+      };
+      search.setVal = function(val) {
+        $searchInput.val(val);
+      };
+
+      $searchInput.on('focus', function() {
+        $(this).addClass('focus');
+      });
+      $searchInput.on('blur', function() {
+        $(this).removeClass('focus');
+      });
+      $searchInput.on('input', window.throttle(function() {
+        var val = $(this).val();
+        if (val === '' || typeof val !== 'string') {
+          search.clear && search.clear();
+        } else {
+          $searchBox.addClass('not-empty');
+          search.onInputNotEmpty && search.onInputNotEmpty(val);
+        }
+      }, 400));
+      $searchClear.on('click', function() {
+        $searchInput.val(''); $searchBox.removeClass('not-empty');
+        search.clear && search.clear();
+      });
+    }
+  });
+})();
+</script><div class="search search--dark">
+  <div class="main">
+    <div class="search__header">검색</div>
+    <div class="search-bar">
+      <div class="search-box js-search-box">
+        <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
+        <input type="text" />
+        <div class="search-box__icon-clear js-icon-clear">
+          <a><i class="fas fa-times"></i></a>
+        </div>
+      </div>
+      <button class="button button--theme-dark button--pill search__cancel js-search-toggle">
+        취소</button>
+    </div>
+    <div class="search-result js-search-result"></div>
+  </div>
+</div>
+<script>var SOURCES = window.TEXT_VARIABLES.sources;
+var PAHTS = window.TEXT_VARIABLES.paths;
+window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
+  var search = (window.search || (window.search = {}));
+  var searchData = window.TEXT_SEARCH_DATA || {};
+
+  function memorize(f) {
+    var cache = {};
+    return function () {
+      var key = Array.prototype.join.call(arguments, ',');
+      if (key in cache) return cache[key];
+      else return cache[key] = f.apply(this, arguments);
+    };
+  }
+
+  /// search
+  function searchByQuery(query) {
+    var i, j, key, keys, cur, _title, result = {};
+    keys = Object.keys(searchData);
+    for (i = 0; i < keys.length; i++) {
+      key = keys[i];
+      for (j = 0; j < searchData[key].length; j++) {
+        cur = searchData[key][j], _title = cur.title;
+        if ((result[key] === undefined || result[key] && result[key].length < 20 )
+          && _title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
+          if (result[key] === undefined) {
+            result[key] = [];
+          }
+          result[key].push(cur);
+        }
+      }
+    }
+    return result;
+  }
+
+  var renderHeader = memorize(function(header) {
+    return $('<p class="search-result__header">' + header + '</p>');
+  });
+
+  var renderItem = function(index, title, url) {
+    return $('<li class="search-result__item" data-index="' + index + '"><a class="button" href="' + url + '">' + title + '</a></li>');
+  };
+
+  function render(data) {
+    if (!data) { return null; }
+    var $root = $('<ul></ul>'), i, j, key, keys, cur, itemIndex = 0;
+    keys = Object.keys(data);
+    for (i = 0; i < keys.length; i++) {
+      key = keys[i];
+      $root.append(renderHeader(key));
+      for (j = 0; j < data[key].length; j++) {
+        cur = data[key][j];
+        $root.append(renderItem(itemIndex++, cur.title, cur.url));
+      }
+    }
+    return $root;
+  }
+
+  // search box
+  var $result = $('.js-search-result'), $resultItems;
+  var lastActiveIndex, activeIndex;
+
+  function clear() {
+    $result.html(null);
+    $resultItems = $('.search-result__item'); activeIndex = 0;
+  }
+  function onInputNotEmpty(val) {
+    $result.html(render(searchByQuery(val)));
+    $resultItems = $('.search-result__item'); activeIndex = 0;
+    $resultItems.eq(0).addClass('active');
+  }
+
+  search.clear = clear;
+  search.onInputNotEmpty = onInputNotEmpty;
+
+  function updateResultItems() {
+    lastActiveIndex >= 0 && $resultItems.eq(lastActiveIndex).removeClass('active');
+    activeIndex >= 0 && $resultItems.eq(activeIndex).addClass('active');
+  }
+
+  function moveActiveIndex(direction) {
+    var itemsCount = $resultItems ? $resultItems.length : 0;
+    if (itemsCount > 1) {
+      lastActiveIndex = activeIndex;
+      if (direction === 'up') {
+        activeIndex = (activeIndex - 1 + itemsCount) % itemsCount;
+      } else if (direction === 'down') {
+        activeIndex = (activeIndex + 1 + itemsCount) % itemsCount;
+      }
+      updateResultItems();
+    }
+  }
+
+  // Char Code: 13  Enter, 37  ⬅, 38  ⬆, 39  ➡, 40  ⬇
+  $(window).on('keyup', function(e) {
+    var modalVisible = search.getModalVisible && search.getModalVisible();
+    if (modalVisible) {
+      if (e.which === 38) {
+        modalVisible && moveActiveIndex('up');
+      } else if (e.which === 40) {
+        modalVisible && moveActiveIndex('down');
+      } else if (e.which === 13) {
+        modalVisible && $resultItems && activeIndex >= 0 && $resultItems.eq(activeIndex).children('a')[0].click();
+      }
+    }
+  });
+
+  $result.on('mouseover', '.search-result__item > a', function() {
+    var itemIndex = $(this).parent().data('index');
+    itemIndex >= 0 && (lastActiveIndex = activeIndex, activeIndex = itemIndex, updateResultItems());
+  });
+});
+</script>
+</div></div>
+
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function scrollToAnchor(anchor, duration, callback) {
+      var $root = this;
+      $root.animate({ scrollTop: $(anchor).position().top }, duration, function() {
+        window.history.replaceState(null, '', window.location.href.split('#')[0] + anchor);
+        callback && callback();
+      });
+    }
+    $.fn.scrollToAnchor = scrollToAnchor;
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function affix(options) {
+      var $root = this, $window = $(window), $scrollTarget, $scroll,
+        offsetBottom = 0, scrollTarget = window, scroll = window.document, disabled = false, isOverallScroller = true,
+        rootTop, rootLeft, rootHeight, scrollBottom, rootBottomTop,
+        hasInit = false, curState;
+
+      function setOptions(options) {
+        var _options = options || {};
+        _options.offsetBottom && (offsetBottom = _options.offsetBottom);
+        _options.scrollTarget && (scrollTarget = _options.scrollTarget);
+        _options.scroll && (scroll = _options.scroll);
+        _options.disabled !== undefined && (disabled = _options.disabled);
+        $scrollTarget = $(scrollTarget);
+        isOverallScroller = window.isOverallScroller($scrollTarget[0]);
+        $scroll = $(scroll);
+      }
+      function preCalc() {
+        top();
+        rootHeight = $root.outerHeight();
+        rootTop = $root.offset().top + (isOverallScroller ? 0 :  $scrollTarget.scrollTop());
+        rootLeft = $root.offset().left;
+      }
+      function calc(needPreCalc) {
+        needPreCalc && preCalc();
+        scrollBottom = $scroll.outerHeight() - offsetBottom - rootHeight;
+        rootBottomTop = scrollBottom - rootTop;
+      }
+      function top() {
+        if (curState !== 'top') {
+          $root.removeClass('fixed').css({
+            left: 0,
+            top: 0
+          });
+          curState = 'top';
+        }
+      }
+      function fixed() {
+        if (curState !== 'fixed') {
+          $root.addClass('fixed').css({
+            left: rootLeft + 'px',
+            top: 0
+          });
+          curState = 'fixed';
+        }
+      }
+      function bottom() {
+        if (curState !== 'bottom') {
+          $root.removeClass('fixed').css({
+            left: 0,
+            top: rootBottomTop + 'px'
+          });
+          curState = 'bottom';
+        }
+      }
+      function setState() {
+        var scrollTop = $scrollTarget.scrollTop();
+        if (scrollTop >= rootTop && scrollTop <= scrollBottom) {
+          fixed();
+        } else if (scrollTop < rootTop) {
+          top();
+        } else {
+          bottom();
+        }
+      }
+      function init() {
+        if(!hasInit) {
+          var interval, timeout;
+          calc(true); setState();
+          // run calc every 100 millisecond
+          interval = setInterval(function() {
+            calc();
+          }, 100);
+          timeout = setTimeout(function() {
+            clearInterval(interval);
+          }, 45000);
+          window.pageLoad.then(function() {
+            setTimeout(function() {
+              clearInterval(interval);
+              clearTimeout(timeout);
+            }, 3000);
+          });
+          $scrollTarget.on('scroll', function() {
+            disabled || setState();
+          });
+          $window.on('resize', function() {
+            disabled || (calc(true), setState());
+          });
+          hasInit = true;
+        }
+      }
+
+      setOptions(options);
+      if (!disabled) {
+        init();
+      }
+      $window.on('resize', window.throttle(function() {
+        init();
+      }, 200));
+      return {
+        setOptions: setOptions,
+        refresh: function() {
+          calc(true, { animation: false }); setState();
+        }
+      };
+    }
+    $.fn.affix = affix;
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function toc(options) {
+      var $root = this, $window = $(window), $scrollTarget, $scroller, $tocUl = $('<ul class="toc toc--ellipsis"></ul>'), $tocLi, $headings, $activeLast, $activeCur,
+        selectors = 'h1,h2,h3', container = 'body', scrollTarget = window, scroller = 'html, body', disabled = false,
+        headingsPos, scrolling = false, hasRendered = false, hasInit = false;
+
+      function setOptions(options) {
+        var _options = options || {};
+        _options.selectors && (selectors = _options.selectors);
+        _options.container && (container = _options.container);
+        _options.scrollTarget && (scrollTarget = _options.scrollTarget);
+        _options.scroller && (scroller = _options.scroller);
+        _options.disabled !== undefined && (disabled = _options.disabled);
+        $headings = $(container).find(selectors).filter('[id]');
+        $scrollTarget = $(scrollTarget);
+        $scroller = $(scroller);
+      }
+      function calc() {
+        headingsPos = [];
+        $headings.each(function() {
+          headingsPos.push(Math.floor($(this).position().top));
+        });
+      }
+      function setState(element, disabled) {
+        var scrollTop = $scrollTarget.scrollTop(), i;
+        if (disabled || !headingsPos || headingsPos.length < 1) { return; }
+        if (element) {
+          $activeCur = element;
+        } else {
+          for (i = 0; i < headingsPos.length; i++) {
+            if (scrollTop >= headingsPos[i]) {
+              $activeCur = $tocLi.eq(i);
+            } else {
+              $activeCur || ($activeCur = $tocLi.eq(i));
+              break;
+            }
+          }
+        }
+        $activeLast && $activeLast.removeClass('active');
+        ($activeLast = $activeCur).addClass('active');
+      }
+      function render() {
+        if(!hasRendered) {
+          $root.append($tocUl);
+          $headings.each(function() {
+            var $this = $(this);
+            $tocUl.append($('<li></li>').addClass('toc-' + $this.prop('tagName').toLowerCase())
+              .append($('<a></a>').text($this.text()).attr('href', '#' + $this.prop('id'))));
+          });
+          $tocLi = $tocUl.children('li');
+          $tocUl.on('click', 'a', function(e) {
+            e.preventDefault();
+            var $this = $(this);
+            scrolling = true;
+            setState($this.parent());
+            $scroller.scrollToAnchor($this.attr('href'), 400, function() {
+              scrolling = false;
+            });
+          });
+        }
+        hasRendered = true;
+      }
+      function init() {
+        var interval, timeout;
+        if(!hasInit) {
+          render(); calc(); setState(null, scrolling);
+          // run calc every 100 millisecond
+          interval = setInterval(function() {
+            calc();
+          }, 100);
+          timeout = setTimeout(function() {
+            clearInterval(interval);
+          }, 45000);
+          window.pageLoad.then(function() {
+            setTimeout(function() {
+              clearInterval(interval);
+              clearTimeout(timeout);
+            }, 3000);
+          });
+          $scrollTarget.on('scroll', function() {
+            disabled || setState(null, scrolling);
+          });
+          $window.on('resize', window.throttle(function() {
+            if (!disabled) {
+              render(); calc(); setState(null, scrolling);
+            }
+          }, 100));
+        }
+        hasInit = true;
+      }
+
+      setOptions(options);
+      if (!disabled) {
+        init();
+      }
+      $window.on('resize', window.throttle(function() {
+        init();
+      }, 200));
+      return {
+        setOptions: setOptions
+      };
+    }
+    $.fn.toc = toc;
+  });
+})();
+/*(function () {
+
+})();*/
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
+</script>
+    </div>
+    <script>(function () {
+  var $root = document.getElementsByClassName('root')[0];
+  if (window.hasEvent('touchstart')) {
+    $root.dataset.isTouch = true;
+    document.addEventListener('touchstart', function(){}, false);
+  }
+})();
+</script>
+  </body>
+</html>
+
